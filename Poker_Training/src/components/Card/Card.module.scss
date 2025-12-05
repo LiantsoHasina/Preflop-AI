@@ -1,0 +1,21 @@
+@use 'tailwindcss';
+
+.card {
+  @apply w-20 h-28 bg-white rounded-lg shadow-lg border-2 border-gray-300 flex flex-col items-center justify-center;
+
+  &.red {
+    @apply text-red-600;
+  }
+
+  &.black {
+    @apply text-gray-900;
+  }
+
+  .rank {
+    @apply text-3xl font-bold;
+  }
+
+  .suit {
+    @apply text-4xl;
+  }
+}

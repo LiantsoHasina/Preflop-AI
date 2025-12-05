@@ -1,8 +1,7 @@
 import './App.css'
-import PokerPreflopTrainer from "./poker-preflop-trainer.tsx";
+import { PokerPreflopTrainer } from './components';
 
 function App() {
-
   return (
     <>
       <PokerPreflopTrainer />

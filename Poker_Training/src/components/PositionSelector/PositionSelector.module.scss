@@ -1,0 +1,68 @@
+@use 'tailwindcss';
+
+.container {
+  .label {
+    @apply text-white text-center mb-3 text-sm font-semibold;
+  }
+
+  .table {
+    @apply relative bg-green-700 rounded-full mx-auto;
+    width: 400px;
+    height: 200px;
+  }
+
+  .positionButton {
+    @apply cursor-pointer absolute w-16 h-16 rounded-full flex flex-col items-center justify-center transition-all;
+
+    &.inactive {
+      @apply bg-gray-700;
+
+      &:hover {
+        @apply bg-gray-600;
+      }
+    }
+
+    &.active {
+      @apply bg-yellow-500 scale-110 shadow-lg;
+    }
+
+    .icon {
+      @apply text-2xl;
+    }
+
+    .positionLabel {
+      @apply text-xs font-bold text-white;
+    }
+  }
+
+  // Position-specific placements
+  .ep {
+    top: 10%;
+    left: 10%;
+  }
+
+  .mp {
+    top: 5%;
+    left: 35%;
+  }
+
+  .co {
+    top: 5%;
+    right: 35%;
+  }
+
+  .btn {
+    top: 10%;
+    right: 10%;
+  }
+
+  .sb {
+    bottom: 10%;
+    right: 25%;
+  }
+
+  .bb {
+    bottom: 10%;
+    left: 25%;
+  }
+}

@@ -1,0 +1,156 @@
+@use 'tailwindcss';
+
+.container {
+  @apply space-y-6;
+
+  .chartSection {
+    @apply bg-gray-800 rounded-lg p-6;
+
+    .title {
+      @apply text-white text-2xl font-bold mb-4 text-center;
+    }
+
+    .positionLabel {
+      @apply text-white text-xl font-bold mb-2 text-center;
+    }
+
+    .legend {
+      @apply flex justify-center gap-4 text-sm;
+
+      .legendItem {
+        @apply flex items-center gap-2;
+
+        .colorBox {
+          @apply w-4 h-4 rounded;
+
+          &.raise {
+            @apply bg-green-600;
+          }
+
+          &.call {
+            @apply bg-yellow-600;
+          }
+
+          &.fold {
+            @apply bg-red-600;
+          }
+        }
+
+        .label {
+          @apply text-white;
+        }
+      }
+    }
+
+    .chartContainer {
+      @apply flex justify-center overflow-x-auto;
+
+      .chartTable {
+        @apply bg-gray-900 p-4 rounded-lg inline-block;
+
+        table {
+          @apply border-collapse;
+
+          thead {
+            tr {
+              th {
+                @apply bg-gray-800 text-white font-bold text-center w-10 h-10 text-xs;
+
+                &.empty {
+                  @apply bg-gray-800;
+                }
+              }
+            }
+          }
+
+          tbody {
+            tr {
+              td {
+                @apply text-white font-bold text-center w-10 h-10 cursor-pointer transition-all text-xs;
+
+                &.headerCell {
+                  @apply bg-gray-800;
+                }
+
+                &.raise {
+                  @apply bg-green-600;
+
+                  &:hover {
+                    @apply bg-green-500;
+                  }
+
+                  &.highlighted {
+                    @apply bg-green-400 border-4 border-cyan-400 scale-110 relative z-10;
+                    box-shadow: 0 0 20px rgba(34, 211, 238, 0.8);
+                  }
+                }
+
+                &.call {
+                  @apply bg-yellow-600;
+
+                  &:hover {
+                    @apply bg-yellow-500;
+                  }
+
+                  &.highlighted {
+                    @apply bg-yellow-400 border-4 border-cyan-400 scale-110 relative z-10;
+                    box-shadow: 0 0 20px rgba(34, 211, 238, 0.8);
+                  }
+                }
+
+                &.fold {
+                  @apply bg-red-600;
+
+                  &:hover {
+                    @apply bg-red-500;
+                  }
+
+                  &.highlighted {
+                    @apply bg-red-400 border-4 border-cyan-400 scale-110 relative z-10;
+                    box-shadow: 0 0 20px rgba(34, 211, 238, 0.8);
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .instructionsBox {
+      @apply mt-6 bg-gray-700 p-4 rounded-lg;
+
+      .instructionsText {
+        @apply text-white text-sm;
+
+        .instructionsTitle {
+          @apply font-bold mb-2;
+        }
+
+        ul {
+          @apply space-y-1 text-gray-300;
+
+          li {
+            span {
+              &.bold {
+                @apply font-bold;
+              }
+
+              &.green {
+                @apply text-green-400 font-bold;
+              }
+
+              &.yellow {
+                @apply text-yellow-400 font-bold;
+              }
+
+              &.red {
+                @apply text-red-400 font-bold;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

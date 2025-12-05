@@ -1,0 +1,123 @@
+@use 'tailwindcss';
+
+.container {
+  @apply space-y-6;
+
+  .gameArea {
+    @apply bg-gray-800 rounded-lg p-6;
+
+    .streakInfo {
+      @apply flex justify-between items-center mb-6;
+
+      .stats {
+        @apply text-white text-sm;
+
+        div {
+          .label {
+            @apply text-yellow-400 font-bold text-lg;
+          }
+        }
+      }
+    }
+
+    .handDisplay {
+      @apply flex justify-center gap-4 my-8;
+    }
+
+    .handNotation {
+      @apply text-center mb-4;
+
+      .notation {
+        @apply bg-gray-700 text-white px-4 py-2 rounded text-lg font-mono;
+      }
+    }
+
+    .actionButtons {
+      @apply flex justify-center gap-4;
+
+      .foldButton {
+        @apply cursor-pointer bg-red-600 text-white px-8 py-3 rounded-lg font-bold text-lg transition;
+
+        &:hover {
+          @apply bg-red-700;
+        }
+      }
+
+      .callButton {
+        @apply cursor-pointer bg-yellow-600 text-white px-8 py-3 rounded-lg font-bold text-lg transition;
+
+        &:hover {
+          @apply bg-yellow-700;
+        }
+      }
+
+      .raiseButton {
+        @apply cursor-pointer bg-green-600 text-white px-8 py-3 rounded-lg font-bold text-lg transition;
+
+        &:hover {
+          @apply bg-green-700;
+        }
+      }
+    }
+
+    .feedbackSection {
+      @apply space-y-4;
+
+      .feedbackBox {
+        @apply text-center p-4 rounded-lg text-white;
+
+        &.correct {
+          @apply bg-green-600;
+        }
+
+        &.incorrect {
+          @apply bg-red-600;
+        }
+
+        .feedbackTitle {
+          @apply text-xl font-bold;
+        }
+
+        .correctAction {
+          @apply text-lg;
+
+          .actionText {
+            @apply font-bold uppercase;
+          }
+        }
+      }
+
+      .explanationBox {
+        @apply bg-gray-700 p-4 rounded-lg text-white;
+
+        .title {
+          @apply font-bold mb-2;
+        }
+
+        .content {
+          @apply text-sm leading-relaxed;
+        }
+      }
+
+      .nextButtons {
+        @apply flex gap-2;
+
+        .nextButton {
+          @apply cursor-pointer flex-1 bg-blue-600 text-white px-8 py-3 rounded-lg font-bold text-lg transition;
+
+          &:hover {
+            @apply bg-blue-700;
+          }
+        }
+
+        .viewChartButton {
+          @apply cursor-pointer bg-purple-600 text-white px-6 py-3 rounded-lg font-bold text-lg transition;
+
+          &:hover {
+            @apply bg-purple-700;
+          }
+        }
+      }
+    }
+  }
+}
