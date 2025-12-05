@@ -1,0 +1,131 @@
+@use 'tailwindcss';
+
+.overlay {
+  @apply fixed inset-0 bg-black/50 flex items-center justify-center z-50;
+  animation: fadeIn 0.2s ease-out;
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+}
+
+.modal {
+  @apply bg-gray-800 rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto;
+  animation: slideIn 0.3s ease-out;
+
+  @keyframes slideIn {
+    from {
+      transform: translateY(-50px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  .header {
+    @apply flex justify-between items-center p-6 border-b border-gray-700;
+
+    .title {
+      @apply text-2xl font-bold text-white;
+    }
+
+    .closeButton {
+      @apply cursor-pointer text-gray-400 text-3xl transition-colors;
+
+      &:hover {
+        @apply text-white;
+      }
+    }
+  }
+
+  .content {
+    @apply p-6;
+
+    .handInfo {
+      @apply mb-6;
+
+      .handNotation {
+        @apply text-center mb-4;
+
+        .notation {
+          @apply inline-block bg-gray-700 text-white px-6 py-3 rounded-lg text-3xl font-bold font-mono;
+        }
+      }
+
+      .details {
+        @apply grid grid-cols-2 gap-4 text-white;
+
+        .detailItem {
+          @apply bg-gray-700 p-3 rounded-lg;
+
+          .label {
+            @apply text-gray-400 text-sm mb-1;
+          }
+
+          .value {
+            @apply text-lg font-semibold;
+
+            &.raise {
+              @apply text-green-400;
+            }
+
+            &.call {
+              @apply text-yellow-400;
+            }
+
+            &.fold {
+              @apply text-red-400;
+            }
+          }
+
+          .positionSelect {
+            @apply cursor-pointer w-full bg-gray-600 text-white text-lg font-semibold px-3 py-2 rounded border-2 border-gray-500 transition-colors;
+
+            &:hover {
+              @apply bg-gray-500 border-gray-400;
+            }
+
+            &:focus {
+              @apply outline-none border-blue-500 bg-gray-600;
+            }
+
+            option {
+              @apply bg-gray-700 text-white;
+            }
+          }
+        }
+      }
+    }
+
+    .explanationBox {
+      @apply bg-gray-700 p-4 rounded-lg text-white;
+
+      .explanationTitle {
+        @apply font-bold mb-3 text-lg;
+      }
+
+      .explanationText {
+        @apply text-sm leading-relaxed text-gray-300;
+      }
+    }
+  }
+
+  .footer {
+    @apply p-6 border-t border-gray-700;
+
+    .closeFooterButton {
+      @apply cursor-pointer w-full bg-blue-600 text-white py-3 rounded-lg font-bold text-lg transition;
+
+      &:hover {
+        @apply bg-blue-700;
+      }
+    }
+  }
+}

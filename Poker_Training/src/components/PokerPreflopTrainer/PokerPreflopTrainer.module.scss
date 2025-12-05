@@ -22,7 +22,7 @@
       @apply bg-gray-900 rounded-lg p-2 mb-6 flex gap-2;
 
       .tab {
-        @apply flex-1 py-3 rounded font-bold transition;
+        @apply cursor-pointer flex-1 py-3 rounded font-bold transition;
 
         &.active {
           @apply bg-green-600 text-white;

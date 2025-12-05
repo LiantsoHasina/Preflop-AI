@@ -1,7 +1,9 @@
-import React from 'react';
-import type { Position, Rank, Action } from '../../types';
-import { positions, preflopRanges } from '../../constants';
+import React, { useState } from 'react';
+import type { Position, Rank, Action, Card } from '../../types';
+import { positions, preflopRanges, suits } from '../../constants';
+import { getExplanation } from '../../utils';
 import { PositionSelector } from '../PositionSelector';
+import { HandExplanationModal } from '../Modal/HandExplanationModal';
 import styles from './ChartsView.module.scss';
 
 interface ChartsViewProps {
@@ -16,6 +18,10 @@ export const ChartsView: React.FC<ChartsViewProps> = ({
   onPositionChange
 }) => {
   const allRanks: Rank[] = ['A', 'K', 'Q', 'J', 'T', '9', '8', '7', '6', '5', '4', '3', '2'];
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedHand, setSelectedHand] = useState<string | null>(null);
+  const [selectedAction, setSelectedAction] = useState<Action>('fold');
+  const [selectedExplanation, setSelectedExplanation] = useState<string>('');
 
   const getHandAction = (row: number, col: number): Action => {
     let hand: string = '';
@@ -50,6 +56,37 @@ export const ChartsView: React.FC<ChartsViewProps> = ({
 
   const handlePositionChange = (position: Position) => {
     onPositionChange(position);
+  };
+
+  const convertHandToCards = (hand: string): Card[] => {
+    // Parse hand notation (e.g., "AKs", "QQ", "JTo") to Card objects
+    const rank1 = hand[0] as Rank;
+    const rank2 = hand[1] as Rank;
+    const isSuited = hand.includes('s');
+    const isPair = rank1 === rank2;
+
+    // Use first two suits for suited/offsuit
+    const suit1 = suits[0];
+    const suit2 = isSuited || isPair ? suits[0] : suits[1];
+
+    return [
+      { rank: rank1, suit: suit1 },
+      { rank: rank2, suit: suit2 }
+    ];
+  };
+
+  const handleCellClick = (hand: string, action: Action) => {
+    const cards = convertHandToCards(hand);
+    const explanation = getExplanation(cards, chartPosition, action);
+
+    setSelectedHand(hand);
+    setSelectedAction(action);
+    setSelectedExplanation(explanation);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
   };
 
   return (
@@ -100,11 +137,13 @@ export const ChartsView: React.FC<ChartsViewProps> = ({
                       const hand: string = rowIdx === colIdx ? allRanks[rowIdx] + allRanks[colIdx] :
                                    rowIdx < colIdx ? allRanks[rowIdx] + allRanks[colIdx] + 's' :
                                    allRanks[colIdx] + allRanks[rowIdx] + 'o';
+                      const action = getHandAction(rowIdx, colIdx);
                       return (
                         <td
                           key={`${rowRank}-${colRank}`}
                           className={getCellClassName(rowIdx, colIdx)}
                           title={hand}
+                          onClick={() => handleCellClick(hand, action)}
                         >
                           {hand}
                         </td>
@@ -125,10 +164,22 @@ export const ChartsView: React.FC<ChartsViewProps> = ({
               <li>• <span className={styles.bold}>Suited hands</span> are above the diagonal (marked with 's')</li>
               <li>• <span className={styles.bold}>Offsuit hands</span> are below the diagonal (marked with 'o')</li>
               <li>• <span className={styles.green}>Green</span> = Raise, <span className={styles.yellow}>Yellow</span> = Call, <span className={styles.red}>Red</span> = Fold</li>
+              <li>• <span className={styles.bold}>Click any hand</span> to see detailed explanation</li>
             </ul>
           </div>
         </div>
       </div>
+
+      {selectedHand && (
+        <HandExplanationModal
+          isOpen={isModalOpen}
+          onClose={handleCloseModal}
+          hand={selectedHand}
+          position={chartPosition}
+          action={selectedAction}
+          explanation={selectedExplanation}
+        />
+      )}
     </div>
   );
 };

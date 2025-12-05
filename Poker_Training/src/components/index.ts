@@ -4,3 +4,5 @@ export { PracticeView } from './PracticeView';
 export { StatsView } from './StatsView';
 export { ChartsView } from './ChartsView';
 export { PokerPreflopTrainer } from './PokerPreflopTrainer';
+export { Modal } from './Modal';
+export { HandExplanationModal } from './Modal/HandExplanationModal';
