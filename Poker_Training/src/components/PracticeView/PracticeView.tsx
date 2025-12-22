@@ -18,6 +18,8 @@ interface PracticeViewProps {
   onViewInChart: () => void;
   aiExplanation?: string;
   isAnalyzing?: boolean;
+  showContinueToPostflop?: boolean;
+  onContinueToPostflop?: () => void;
 }
 
 export const PracticeView: React.FC<PracticeViewProps> = ({
@@ -32,7 +34,9 @@ export const PracticeView: React.FC<PracticeViewProps> = ({
   onNextHand,
   onViewInChart,
   aiExplanation,
-  isAnalyzing
+  isAnalyzing,
+  showContinueToPostflop,
+  onContinueToPostflop
 }) => {
   return (
     <div className={styles.container}>
@@ -104,17 +108,26 @@ export const PracticeView: React.FC<PracticeViewProps> = ({
             </div>
 
             <div className={styles.nextButtons}>
-              <button
-                onClick={onNextHand}
-                className={styles.nextButton}
-              >
-                Next Hand →
-              </button>
+              {showContinueToPostflop && onContinueToPostflop ? (
+                <button
+                  onClick={onContinueToPostflop}
+                  className={styles.continueButton}
+                >
+                  Continue to Flop
+                </button>
+              ) : (
+                <button
+                  onClick={onNextHand}
+                  className={styles.nextButton}
+                >
+                  Next Hand
+                </button>
+              )}
               <button
                 onClick={onViewInChart}
                 className={styles.viewChartButton}
               >
-                View in Chart 📊
+                View in Chart
               </button>
             </div>
           </div>

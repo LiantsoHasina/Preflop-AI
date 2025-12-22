@@ -1,0 +1,178 @@
+@use 'tailwindcss';
+
+.container {
+  @apply bg-gray-800 rounded-lg p-6;
+
+  .header {
+    @apply text-center mb-6;
+
+    .title {
+      @apply text-2xl font-bold text-white mb-2;
+    }
+
+    .subtitle {
+      @apply text-gray-400;
+    }
+  }
+
+  .tabs {
+    @apply flex gap-2 mb-6 bg-gray-900 rounded-lg p-2;
+
+    .tab {
+      @apply flex-1 py-2 px-4 rounded font-semibold transition-all cursor-pointer text-gray-400;
+
+      &:hover {
+        @apply bg-gray-700 text-white;
+      }
+
+      &.active {
+        @apply bg-purple-600 text-white;
+      }
+    }
+  }
+
+  .tabContent {
+    @apply space-y-6;
+
+    .section {
+      @apply bg-gray-700 rounded-lg p-4;
+
+      .sectionTitle {
+        @apply text-lg font-bold text-green-400 mb-3;
+      }
+
+      .explanation {
+        @apply text-gray-300 leading-relaxed mb-4;
+      }
+
+      .formula {
+        @apply bg-gray-800 p-4 rounded-lg text-green-300 font-mono text-sm leading-relaxed;
+
+        em {
+          @apply text-gray-400 not-italic;
+        }
+      }
+    }
+
+    // Tables
+    .outsTable,
+    .potOddsTable,
+    .equityTable {
+      @apply bg-gray-800 rounded-lg overflow-hidden;
+
+      .tableHeader {
+        @apply grid grid-cols-3 gap-4 bg-gray-900 p-3 font-bold text-white text-sm;
+      }
+
+      .tableRow {
+        @apply grid grid-cols-3 gap-4 p-3 text-gray-300 text-sm border-t border-gray-700;
+
+        &:hover {
+          background-color: rgba(55, 65, 81, 0.5);
+        }
+
+        .outsNum {
+          @apply text-yellow-400 font-bold;
+        }
+
+        .ratio {
+          @apply text-blue-400 font-mono;
+        }
+
+        .percentage {
+          @apply text-green-400 font-bold;
+        }
+
+        .flopEquity {
+          @apply text-purple-400 font-bold;
+        }
+
+        .turnEquity {
+          @apply text-blue-400 font-bold;
+        }
+      }
+    }
+
+    .decisionBox {
+      @apply bg-gray-800 rounded-lg p-4 space-y-3;
+
+      .decisionRule {
+        @apply flex items-center gap-3 text-gray-300;
+
+        .check {
+          @apply text-green-400 font-bold text-lg;
+        }
+
+        .cross {
+          @apply text-red-400 font-bold text-lg;
+        }
+
+        .implied {
+          @apply text-yellow-400 font-bold text-lg;
+        }
+
+        strong {
+          @apply text-white;
+        }
+      }
+    }
+  }
+
+  .drawExamples {
+    @apply grid gap-4;
+
+    .drawExample {
+      @apply bg-gray-700 rounded-lg p-4;
+
+      .drawHeader {
+        @apply flex justify-between items-center mb-2;
+
+        .drawName {
+          @apply text-white font-bold text-lg;
+        }
+
+        .drawOuts {
+          @apply bg-yellow-600 text-white px-3 py-1 rounded-full text-sm font-bold;
+        }
+      }
+
+      .drawDescription {
+        @apply text-gray-400 text-sm mb-4;
+      }
+
+      .cardsSection {
+        @apply flex gap-6 mb-4;
+
+        .cardGroup {
+          .cardLabel {
+            @apply text-gray-400 text-xs block mb-2;
+          }
+
+          .cards {
+            @apply flex gap-1;
+          }
+        }
+      }
+
+      .neededCards {
+        @apply bg-gray-800 p-2 rounded text-gray-300 text-sm mb-2;
+      }
+
+      .equityCalc {
+        @apply flex gap-4 text-sm;
+
+        span {
+          @apply bg-gray-600 px-3 py-1 rounded;
+
+          &:first-child {
+            @apply text-purple-400;
+          }
+
+          &:last-child {
+            @apply text-blue-400;
+          }
+        }
+      }
+    }
+  }
+}

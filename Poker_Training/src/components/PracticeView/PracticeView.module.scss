@@ -110,11 +110,19 @@
           }
         }
 
-        .viewChartButton {
-          @apply cursor-pointer bg-purple-600 text-white px-6 py-3 rounded-lg font-bold text-lg transition;
+        .continueButton {
+          @apply cursor-pointer flex-1 bg-purple-600 text-white px-8 py-3 rounded-lg font-bold text-lg transition;
 
           &:hover {
             @apply bg-purple-700;
+          }
+        }
+
+        .viewChartButton {
+          @apply cursor-pointer bg-gray-600 text-white px-6 py-3 rounded-lg font-bold text-lg transition;
+
+          &:hover {
+            @apply bg-gray-700;
           }
         }
       }

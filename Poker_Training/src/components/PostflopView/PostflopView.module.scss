@@ -1,0 +1,275 @@
+@use 'tailwindcss';
+
+.container {
+  @apply space-y-6;
+
+  .gameArea {
+    @apply bg-gray-800 rounded-lg p-6;
+
+    .roundIndicator {
+      @apply flex justify-center mb-4;
+
+      .roundBadge {
+        @apply bg-purple-600 text-white px-6 py-2 rounded-full font-bold text-lg uppercase tracking-wider;
+      }
+    }
+
+    .potInfo {
+      @apply flex justify-center gap-8 mb-6;
+
+      .potAmount,
+      .betToCall {
+        @apply text-center;
+
+        .label {
+          @apply text-gray-400 text-sm block;
+        }
+
+        .value {
+          @apply text-yellow-400 font-bold text-2xl;
+        }
+      }
+
+      .betToCall .value {
+        @apply text-orange-400;
+      }
+    }
+
+    .communitySection {
+      @apply mb-6;
+
+      .sectionLabel {
+        @apply text-center text-gray-400 text-sm mb-2;
+      }
+
+      .communityCards {
+        @apply flex justify-center gap-2;
+
+        .cardPlaceholder {
+          @apply w-16 h-22 bg-gray-700 rounded-lg flex items-center justify-center text-gray-500 text-2xl font-bold border-2 border-dashed border-gray-600;
+          height: 5.5rem;
+        }
+      }
+    }
+
+    .holeCardsSection {
+      @apply mb-6;
+
+      .sectionLabel {
+        @apply text-center text-gray-400 text-sm mb-2;
+      }
+
+      .holeCards {
+        @apply flex justify-center gap-3;
+      }
+
+      .handNotation {
+        @apply text-center mt-2;
+
+        .notation {
+          @apply bg-gray-700 text-white px-4 py-1 rounded text-sm font-mono;
+        }
+      }
+    }
+
+    .oddsInfo {
+      @apply bg-gray-700 rounded-lg p-4 mb-6;
+
+      .oddsHeader {
+        @apply flex items-center justify-between mb-3;
+
+        .oddsHeaderLeft {
+          @apply flex items-center gap-2 text-white font-bold text-lg;
+
+          .clickHint {
+            @apply text-gray-400 text-xs font-normal;
+          }
+        }
+
+        .visibilityToggle {
+          @apply bg-gray-600 hover:bg-gray-500 text-gray-300 hover:text-white p-2 rounded-lg cursor-pointer transition-all border-none;
+
+          svg {
+            @apply block;
+          }
+        }
+      }
+
+      .oddsGrid {
+        @apply grid grid-cols-2 md:grid-cols-4 gap-4 mb-4;
+
+        .oddsItem {
+          @apply text-center p-2 rounded-lg transition-all;
+
+          &.clickable {
+            @apply cursor-pointer;
+
+            &:hover {
+              @apply bg-gray-600 transform scale-105;
+
+              .oddsLabel {
+                @apply text-white;
+              }
+
+              .oddsValue {
+                @apply text-yellow-400;
+              }
+            }
+          }
+
+          .oddsLabel {
+            @apply text-gray-400 text-xs block transition-colors;
+          }
+
+          .oddsValue {
+            @apply text-green-400 font-bold text-lg transition-colors;
+          }
+        }
+      }
+
+      .drawsList {
+        @apply space-y-1;
+
+        .drawItem {
+          @apply text-gray-300 text-sm bg-gray-600 rounded px-3 py-1;
+        }
+      }
+    }
+
+    .actionButtons {
+      @apply flex justify-center gap-4;
+
+      .foldButton {
+        @apply cursor-pointer bg-red-600 text-white px-8 py-3 rounded-lg font-bold text-lg transition;
+
+        &:hover:not(:disabled) {
+          @apply bg-red-700;
+        }
+
+        &:disabled {
+          @apply opacity-50 cursor-not-allowed;
+        }
+      }
+
+      .callButton {
+        @apply cursor-pointer bg-yellow-600 text-white px-8 py-3 rounded-lg font-bold text-lg transition;
+
+        &:hover:not(:disabled) {
+          @apply bg-yellow-700;
+        }
+
+        &:disabled {
+          @apply opacity-50 cursor-not-allowed;
+        }
+      }
+
+      .raiseButton {
+        @apply cursor-pointer bg-green-600 text-white px-8 py-3 rounded-lg font-bold text-lg transition;
+
+        &:hover:not(:disabled) {
+          @apply bg-green-700;
+        }
+
+        &:disabled {
+          @apply opacity-50 cursor-not-allowed;
+        }
+      }
+
+      .checkButton {
+        @apply cursor-pointer bg-blue-600 text-white px-8 py-3 rounded-lg font-bold text-lg transition;
+
+        &:hover:not(:disabled) {
+          @apply bg-blue-700;
+        }
+
+        &:disabled {
+          @apply opacity-50 cursor-not-allowed;
+        }
+      }
+
+      .betButton {
+        @apply cursor-pointer bg-green-600 text-white px-8 py-3 rounded-lg font-bold text-lg transition;
+
+        &:hover:not(:disabled) {
+          @apply bg-green-700;
+        }
+
+        &:disabled {
+          @apply opacity-50 cursor-not-allowed;
+        }
+      }
+    }
+
+    .feedbackSection {
+      @apply space-y-4;
+
+      .feedbackBox {
+        @apply text-center p-4 rounded-lg text-white;
+
+        &.correct {
+          @apply bg-green-600;
+        }
+
+        &.incorrect {
+          @apply bg-red-600;
+        }
+
+        .feedbackTitle {
+          @apply text-xl font-bold mb-2;
+        }
+
+        .feedbackActions {
+          @apply text-sm;
+
+          .playerAction {
+            @apply font-bold uppercase text-white/90;
+          }
+
+          .correctAction {
+            @apply font-bold uppercase text-yellow-300;
+          }
+        }
+      }
+
+      .explanationBox {
+        @apply bg-gray-700 p-4 rounded-lg text-white max-h-64 overflow-y-auto;
+
+        .title {
+          @apply font-bold mb-2 text-lg;
+        }
+
+        .content {
+          @apply text-sm leading-relaxed space-y-2;
+
+          p {
+            @apply mb-1;
+
+            &.bold {
+              @apply font-semibold text-yellow-400;
+            }
+          }
+        }
+      }
+
+      .nextButtons {
+        @apply flex gap-2;
+
+        .nextStreetButton {
+          @apply cursor-pointer flex-1 bg-purple-600 text-white px-8 py-3 rounded-lg font-bold text-lg transition;
+
+          &:hover {
+            @apply bg-purple-700;
+          }
+        }
+
+        .newHandButton {
+          @apply cursor-pointer flex-1 bg-blue-600 text-white px-8 py-3 rounded-lg font-bold text-lg transition;
+
+          &:hover {
+            @apply bg-blue-700;
+          }
+        }
+      }
+    }
+  }
+}

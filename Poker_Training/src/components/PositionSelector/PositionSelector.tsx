@@ -43,12 +43,12 @@ export const PositionSelector: React.FC<PositionSelectorProps> = ({
       <div className={styles.label}>Select Your Position:</div>
       <div className={styles.table}>
         <PositionButton
-          label="EP"
-          title="Early Position"
+          label="UTG"
+          title="Under the Gun"
           icon="👤"
-          isActive={currentPosition === 'EP'}
-          onClick={() => onPositionChange('EP')}
-          className={styles.ep}
+          isActive={currentPosition === 'UTG'}
+          onClick={() => onPositionChange('UTG')}
+          className={styles.utg}
         />
 
         <PositionButton

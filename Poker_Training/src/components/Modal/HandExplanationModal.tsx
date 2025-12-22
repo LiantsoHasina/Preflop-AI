@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import type { Position, Action, Card } from '../../types';
-import { positions, preflopRanges, suits } from '../../constants';
-import { getExplanation } from '../../utils';
+import type { Position, Action } from '../../types';
+import { positions } from '../../constants';
+import { getExplanation, convertHandNotationToCards, getActionForHandNotation } from '../../utils';
 import { Modal } from './Modal';
 import styles from './Modal.module.scss';
 
@@ -26,41 +26,18 @@ export const HandExplanationModal: React.FC<HandExplanationModalProps> = ({
   const [currentAction, setCurrentAction] = useState<Action>(initialAction);
   const [currentExplanation, setCurrentExplanation] = useState<string>(initialExplanation);
 
-  // Reset to initial values when modal opens with new hand
   useEffect(() => {
     setCurrentPosition(initialPosition);
     setCurrentAction(initialAction);
     setCurrentExplanation(initialExplanation);
   }, [hand, initialPosition, initialAction, initialExplanation]);
 
-  const convertHandToCards = (handNotation: string): Card[] => {
-    const rank1 = handNotation[0] as any;
-    const rank2 = handNotation[1] as any;
-    const isSuited = handNotation.includes('s');
-    const isPair = rank1 === rank2;
-
-    const suit1 = suits[0];
-    const suit2 = isSuited || isPair ? suits[0] : suits[1];
-
-    return [
-      { rank: rank1, suit: suit1 },
-      { rank: rank2, suit: suit2 }
-    ];
-  };
-
-  const getActionForHand = (handNotation: string, pos: Position): Action => {
-    const range = preflopRanges[pos];
-    if (range.raise.includes(handNotation)) return 'raise';
-    if (range.call.includes(handNotation)) return 'call';
-    return 'fold';
-  };
-
   const handlePositionChange = (newPosition: Position) => {
     setCurrentPosition(newPosition);
-    const newAction = getActionForHand(hand, newPosition);
+    const newAction = getActionForHandNotation(hand, newPosition);
     setCurrentAction(newAction);
 
-    const cards = convertHandToCards(hand);
+    const cards = convertHandNotationToCards(hand);
     const newExplanation = getExplanation(cards, newPosition, newAction);
     setCurrentExplanation(newExplanation);
   };

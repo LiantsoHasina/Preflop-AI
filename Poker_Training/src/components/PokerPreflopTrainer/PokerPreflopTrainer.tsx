@@ -1,10 +1,41 @@
 import React, { useState, useEffect } from 'react';
-import type { Card, Position, View, Feedback, PositionStats, Action } from '../../types';
-import { generateHand, getCorrectAction, getHandNotation, getFullAnalysisAI, getExplanation } from '../../utils';
-import { PracticeView, StatsView, ChartsView, AISelectionModal } from '../../components';
+import type {
+  Card,
+  Position,
+  View,
+  Feedback,
+  PositionStats,
+  Action,
+  GameMode,
+  BettingRound,
+  PostflopAction,
+  PostflopFeedback,
+  OutsAnalysis,
+  PostflopGameState
+} from '../../types';
+import {
+  generateHand,
+  getCorrectAction,
+  getHandNotation,
+  getFullAnalysisAI,
+  getExplanation,
+  dealCommunityCards,
+  analyzePostflop,
+  generateBettingScenario
+} from '../../utils';
+import {
+  PracticeView,
+  PostflopView,
+  PostflopChartsView,
+  StatsView,
+  ChartsView,
+  AISelectionModal,
+  GameModeSelector
+} from '../../components';
 import styles from './PokerPreflopTrainer.module.scss';
 
 export const PokerPreflopTrainer: React.FC = () => {
+  // Preflop State
   const [currentHand, setCurrentHand] = useState<Card[]>([]);
   const [position, setPosition] = useState<Position>('BTN');
   const [score, setScore] = useState<number>(0);
@@ -16,7 +47,7 @@ export const PokerPreflopTrainer: React.FC = () => {
   const [showExplanation, setShowExplanation] = useState<boolean>(false);
   const [view, setView] = useState<View>('practice');
   const [positionStats, setPositionStats] = useState<PositionStats>({
-    EP: { correct: 0, total: 0 },
+    UTG: { correct: 0, total: 0 },
     MP: { correct: 0, total: 0 },
     CO: { correct: 0, total: 0 },
     BTN: { correct: 0, total: 0 },
@@ -30,6 +61,21 @@ export const PokerPreflopTrainer: React.FC = () => {
   const [aiExplanation, setAIExplanation] = useState<string>('');
   const [showAISelectionModal, setShowAISelectionModal] = useState<boolean>(true);
 
+  // Game Mode State
+  const [gameMode, setGameMode] = useState<GameMode | null>(null);
+  const [showGameModeSelector, setShowGameModeSelector] = useState<boolean>(true);
+
+  // Postflop State
+  const [bettingRound, setBettingRound] = useState<BettingRound>('preflop');
+  const [communityCards, setCommunityCards] = useState<Card[]>([]);
+  const [pot, setPot] = useState<number>(0);
+  const [betToCall, setBetToCall] = useState<number>(0);
+  const [playerChips, setPlayerChips] = useState<number>(200);
+  const [opponentChips, setOpponentChips] = useState<number>(200);
+  const [postflopAnalysis, setPostflopAnalysis] = useState<OutsAnalysis | null>(null);
+  const [postflopFeedback, setPostflopFeedback] = useState<PostflopFeedback | null>(null);
+  const [showPostflopFeedback, setShowPostflopFeedback] = useState<boolean>(false);
+
   useEffect(() => {
     handleGenerateHand();
   }, []);
@@ -39,6 +85,145 @@ export const PokerPreflopTrainer: React.FC = () => {
     setCurrentHand(newHand);
     setFeedback(null);
     setShowExplanation(false);
+    // Reset postflop state
+    setBettingRound('preflop');
+    setCommunityCards([]);
+    setPot(0);
+    setBetToCall(0);
+    setPostflopAnalysis(null);
+    setPostflopFeedback(null);
+    setShowPostflopFeedback(false);
+  };
+
+  const handleGameModeSelect = (mode: GameMode): void => {
+    setGameMode(mode);
+    setShowGameModeSelector(false);
+
+    // If postflop-only mode, immediately transition to postflop
+    if (mode === 'postflop-only') {
+      startPostflopOnly();
+    }
+  };
+
+  const startPostflopOnly = (): void => {
+    // Generate a new hand and immediately deal the flop
+    const newHand = generateHand();
+    setCurrentHand(newHand);
+    setFeedback(null);
+    setShowExplanation(false);
+
+    // Deal the flop
+    const flop = dealCommunityCards(newHand, 'flop');
+    setCommunityCards(flop);
+    setBettingRound('flop');
+
+    // Generate betting scenario
+    const scenario = generateBettingScenario('flop');
+    setPot(scenario.pot);
+    setBetToCall(scenario.betToCall);
+    setPlayerChips(scenario.playerChips);
+    setOpponentChips(scenario.opponentChips);
+
+    // Analyze the flop
+    const gameState: PostflopGameState = {
+      communityCards: flop,
+      pot: scenario.pot,
+      betToCall: scenario.betToCall,
+      bettingRound: 'flop',
+      playerChips: scenario.playerChips,
+      opponentChips: scenario.opponentChips
+    };
+    const analysis = analyzePostflop(newHand, flop, gameState);
+    setPostflopAnalysis(analysis);
+    setPostflopFeedback(null);
+    setShowPostflopFeedback(false);
+  };
+
+  const handleTransitionToPostflop = (): void => {
+    // Deal the flop
+    const flop = dealCommunityCards(currentHand, 'flop');
+    setCommunityCards(flop);
+    setBettingRound('flop');
+
+    // Generate betting scenario
+    const scenario = generateBettingScenario('flop');
+    setPot(scenario.pot);
+    setBetToCall(scenario.betToCall);
+    setPlayerChips(scenario.playerChips);
+    setOpponentChips(scenario.opponentChips);
+
+    // Analyze the flop
+    const gameState: PostflopGameState = {
+      communityCards: flop,
+      pot: scenario.pot,
+      betToCall: scenario.betToCall,
+      bettingRound: 'flop',
+      playerChips: scenario.playerChips,
+      opponentChips: scenario.opponentChips
+    };
+    const analysis = analyzePostflop(currentHand, flop, gameState);
+    setPostflopAnalysis(analysis);
+  };
+
+  const handleDealNextStreet = (): void => {
+    const nextRound: BettingRound = bettingRound === 'flop' ? 'turn' : 'river';
+    const newCard = dealCommunityCards([...currentHand, ...communityCards], nextRound);
+    const updatedCommunity = [...communityCards, ...newCard];
+    setCommunityCards(updatedCommunity);
+    setBettingRound(nextRound);
+
+    // Generate new betting scenario
+    const scenario = generateBettingScenario(nextRound);
+    setPot(pot + scenario.pot); // Add to existing pot
+    setBetToCall(scenario.betToCall);
+
+    // Analyze the new street
+    const gameState: PostflopGameState = {
+      communityCards: updatedCommunity,
+      pot: pot + scenario.pot,
+      betToCall: scenario.betToCall,
+      bettingRound: nextRound,
+      playerChips,
+      opponentChips
+    };
+    const analysis = analyzePostflop(currentHand, updatedCommunity, gameState);
+    setPostflopAnalysis(analysis);
+    setPostflopFeedback(null);
+    setShowPostflopFeedback(false);
+  };
+
+  const handlePostflopAction = (action: PostflopAction): void => {
+    if (!postflopAnalysis) return;
+
+    setIsAnalyzing(true);
+
+    // Determine if the action is correct
+    const correctAction = postflopAnalysis.recommendedAction;
+    const isCorrect = action === correctAction;
+
+    // Update stats
+    setTotalHands(totalHands + 1);
+
+    if (isCorrect) {
+      setScore(score + 10);
+      setStreak(streak + 1);
+      setCorrectAnswers(correctAnswers + 1);
+      if (streak + 1 > bestStreak) {
+        setBestStreak(streak + 1);
+      }
+    } else {
+      setStreak(0);
+    }
+
+    // Set feedback
+    setPostflopFeedback({
+      type: isCorrect ? 'correct' : 'incorrect',
+      playerAction: action,
+      correctAction,
+      analysis: postflopAnalysis
+    });
+    setShowPostflopFeedback(true);
+    setIsAnalyzing(false);
   };
 
   const handleAction = async (action: Action): Promise<void> => {
@@ -125,8 +310,21 @@ export const PokerPreflopTrainer: React.FC = () => {
   };
 
   const handleNextHand = (): void => {
-    handleGenerateHand();
+    if (gameMode === 'postflop-only') {
+      startPostflopOnly();
+    } else {
+      handleGenerateHand();
+    }
     setHighlightedHand(null);
+  };
+
+  const handleContinueToPostflop = (): void => {
+    // Only transition if in full-game mode and preflop was correct
+    if (gameMode === 'full-game' && feedback?.type === 'correct') {
+      handleTransitionToPostflop();
+      setFeedback(null);
+      setShowExplanation(false);
+    }
   };
 
   const handleViewInChart = (): void => {
@@ -137,7 +335,7 @@ export const PokerPreflopTrainer: React.FC = () => {
 
   const handleChartPositionChange = (newPosition: Position): void => {
     setChartPosition(newPosition);
-    setHighlightedHand(null);
+    // Keep highlighted hand active when changing position
   };
 
   const handleAISelection = (selectedUseAI: boolean): void => {
@@ -145,16 +343,50 @@ export const PokerPreflopTrainer: React.FC = () => {
     setShowAISelectionModal(false);
   };
 
+  const isInPostflop = (bettingRound !== 'preflop' && gameMode === 'full-game') || gameMode === 'postflop-only';
+  const showContinueToPostflop = gameMode === 'full-game' &&
+    feedback?.type === 'correct' &&
+    bettingRound === 'preflop' &&
+    (feedback.action === 'raise' || feedback.action === 'call');
+
+  const getTitle = () => {
+    switch (gameMode) {
+      case 'full-game':
+        return '♠ Poker Trainer ♣';
+      case 'postflop-only':
+        return '♠ Postflop Trainer ♣';
+      default:
+        return '♠ Poker Preflop Trainer ♣';
+    }
+  };
+
+  const getSubtitle = () => {
+    switch (gameMode) {
+      case 'full-game':
+        return 'Master preflop and postflop strategy with pot odds';
+      case 'postflop-only':
+        return 'Practice pot odds, outs, and drawing decisions';
+      default:
+        return 'Master your preflop strategy with instant feedback';
+    }
+  };
+
   return (
     <div className={styles.app}>
-      <AISelectionModal
-        isOpen={showAISelectionModal}
-        onSelect={handleAISelection}
+      <GameModeSelector
+        isOpen={showGameModeSelector}
+        onSelect={handleGameModeSelect}
       />
+      {!showGameModeSelector && (
+        <AISelectionModal
+          isOpen={showAISelectionModal}
+          onSelect={handleAISelection}
+        />
+      )}
       <div className={styles.container}>
         <div className={styles.header}>
-          <h1 className={styles.title}>♠ Poker Preflop Trainer ♣</h1>
-          <p className={styles.subtitle}>Master your preflop strategy with instant feedback</p>
+          <h1 className={styles.title}>{getTitle()}</h1>
+          <p className={styles.subtitle}>{getSubtitle()}</p>
           <div className={styles.aiToggleContainer}>
             <label className={styles.aiToggle}>
               <input
@@ -167,6 +399,12 @@ export const PokerPreflopTrainer: React.FC = () => {
                 {useAI ? '🤖 AI Mode (Claude)' : '📊 Static Ranges'}
               </span>
             </label>
+            <button
+              onClick={() => setShowGameModeSelector(true)}
+              className={styles.changeModeButton}
+            >
+              Change Mode
+            </button>
           </div>
         </div>
 
@@ -191,7 +429,7 @@ export const PokerPreflopTrainer: React.FC = () => {
           </button>
         </div>
 
-        {view === 'practice' && (
+        {view === 'practice' && !isInPostflop && (
           <PracticeView
             currentHand={currentHand}
             position={position}
@@ -205,6 +443,25 @@ export const PokerPreflopTrainer: React.FC = () => {
             onViewInChart={handleViewInChart}
             aiExplanation={aiExplanation}
             isAnalyzing={isAnalyzing}
+            showContinueToPostflop={showContinueToPostflop}
+            onContinueToPostflop={handleContinueToPostflop}
+          />
+        )}
+
+        {view === 'practice' && isInPostflop && (
+          <PostflopView
+            holeCards={currentHand}
+            communityCards={communityCards}
+            bettingRound={bettingRound}
+            pot={pot}
+            betToCall={betToCall}
+            analysis={postflopAnalysis}
+            feedback={postflopFeedback}
+            showFeedback={showPostflopFeedback}
+            isAnalyzing={isAnalyzing}
+            onAction={handlePostflopAction}
+            onNextStreet={handleDealNextStreet}
+            onNewHand={handleNextHand}
           />
         )}
 
@@ -218,12 +475,16 @@ export const PokerPreflopTrainer: React.FC = () => {
           />
         )}
 
-        {view === 'charts' && (
+        {view === 'charts' && !isInPostflop && (
           <ChartsView
             chartPosition={chartPosition}
             highlightedHand={highlightedHand}
             onPositionChange={handleChartPositionChange}
           />
+        )}
+
+        {view === 'charts' && isInPostflop && (
+          <PostflopChartsView />
         )}
       </div>
     </div>

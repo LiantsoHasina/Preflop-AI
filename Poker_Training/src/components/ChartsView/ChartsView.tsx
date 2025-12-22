@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
-import type { Position, Rank, Action, Card } from '../../types';
-import { positions, preflopRanges, suits } from '../../constants';
-import { getExplanation } from '../../utils';
+import type { Position, Action } from '../../types';
+import { positions, CHART_RANKS } from '../../constants';
+import {
+  getExplanation,
+  getActionForHandNotation,
+  getHandNotationFromGrid,
+  convertHandNotationToCards
+} from '../../utils';
 import { PositionSelector } from '../PositionSelector';
 import { HandExplanationModal } from '../Modal/HandExplanationModal';
 import styles from './ChartsView.module.scss';
@@ -17,35 +22,15 @@ export const ChartsView: React.FC<ChartsViewProps> = ({
   highlightedHand,
   onPositionChange
 }) => {
-  const allRanks: Rank[] = ['A', 'K', 'Q', 'J', 'T', '9', '8', '7', '6', '5', '4', '3', '2'];
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedHand, setSelectedHand] = useState<string | null>(null);
   const [selectedAction, setSelectedAction] = useState<Action>('fold');
   const [selectedExplanation, setSelectedExplanation] = useState<string>('');
 
-  const getHandAction = (row: number, col: number): Action => {
-    let hand: string = '';
-    if (row === col) {
-      hand = allRanks[row] + allRanks[col];
-    } else if (row < col) {
-      hand = allRanks[row] + allRanks[col] + 's';
-    } else {
-      hand = allRanks[col] + allRanks[row] + 'o';
-    }
-
-    const range = preflopRanges[chartPosition];
-    if (range.raise.includes(hand)) return 'raise';
-    if (range.call.includes(hand)) return 'call';
-    return 'fold';
-  };
-
   const getCellClassName = (row: number, col: number): string => {
-    const action: Action = getHandAction(row, col);
-    const hand: string = row === col ? allRanks[row] + allRanks[col] :
-                 row < col ? allRanks[row] + allRanks[col] + 's' :
-                 allRanks[col] + allRanks[row] + 'o';
-
-    const isHighlighted: boolean = hand === highlightedHand;
+    const hand = getHandNotationFromGrid(row, col, CHART_RANKS);
+    const action = getActionForHandNotation(hand, chartPosition);
+    const isHighlighted = hand === highlightedHand;
 
     const classes = [styles[action]];
     if (isHighlighted) {
@@ -54,29 +39,8 @@ export const ChartsView: React.FC<ChartsViewProps> = ({
     return classes.join(' ');
   };
 
-  const handlePositionChange = (position: Position) => {
-    onPositionChange(position);
-  };
-
-  const convertHandToCards = (hand: string): Card[] => {
-    // Parse hand notation (e.g., "AKs", "QQ", "JTo") to Card objects
-    const rank1 = hand[0] as Rank;
-    const rank2 = hand[1] as Rank;
-    const isSuited = hand.includes('s');
-    const isPair = rank1 === rank2;
-
-    // Use first two suits for suited/offsuit
-    const suit1 = suits[0];
-    const suit2 = isSuited || isPair ? suits[0] : suits[1];
-
-    return [
-      { rank: rank1, suit: suit1 },
-      { rank: rank2, suit: suit2 }
-    ];
-  };
-
   const handleCellClick = (hand: string, action: Action) => {
-    const cards = convertHandToCards(hand);
+    const cards = convertHandNotationToCards(hand);
     const explanation = getExplanation(cards, chartPosition, action);
 
     setSelectedHand(hand);
@@ -96,7 +60,7 @@ export const ChartsView: React.FC<ChartsViewProps> = ({
 
         <PositionSelector
           currentPosition={chartPosition}
-          onPositionChange={handlePositionChange}
+          onPositionChange={onPositionChange}
         />
 
         <div className={styles.positionLabel}>
@@ -124,20 +88,18 @@ export const ChartsView: React.FC<ChartsViewProps> = ({
               <thead>
                 <tr>
                   <th className={styles.empty}></th>
-                  {allRanks.map(rank => (
+                  {CHART_RANKS.map(rank => (
                     <th key={rank}>{rank}</th>
                   ))}
                 </tr>
               </thead>
               <tbody>
-                {allRanks.map((rowRank, rowIdx) => (
+                {CHART_RANKS.map((rowRank, rowIdx) => (
                   <tr key={rowRank}>
                     <td className={styles.headerCell}>{rowRank}</td>
-                    {allRanks.map((colRank, colIdx) => {
-                      const hand: string = rowIdx === colIdx ? allRanks[rowIdx] + allRanks[colIdx] :
-                                   rowIdx < colIdx ? allRanks[rowIdx] + allRanks[colIdx] + 's' :
-                                   allRanks[colIdx] + allRanks[rowIdx] + 'o';
-                      const action = getHandAction(rowIdx, colIdx);
+                    {CHART_RANKS.map((colRank, colIdx) => {
+                      const hand = getHandNotationFromGrid(rowIdx, colIdx, CHART_RANKS);
+                      const action = getActionForHandNotation(hand, chartPosition);
                       return (
                         <td
                           key={`${rowRank}-${colRank}`}

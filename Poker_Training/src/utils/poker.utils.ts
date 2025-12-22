@@ -94,3 +94,58 @@ export const getExplanation = (hand: Card[], pos: Position, action: Action): str
 export const isRedCard = (card: Card): boolean => {
   return card.suit === '♥' || card.suit === '♦';
 };
+
+/**
+ * Converts hand notation (e.g., "AKs", "QQ", "JTo") to Card objects
+ */
+export const convertHandNotationToCards = (handNotation: string): Card[] => {
+  if (!handNotation || handNotation.length < 2) return [];
+
+  const rank1 = handNotation[0] as Rank;
+  const rank2 = handNotation[1] as Rank;
+  const isSuited = handNotation.includes('s');
+  const isPair = rank1 === rank2;
+
+  const suit1 = suits[0];
+  const suit2 = isSuited || isPair ? suits[0] : suits[1];
+
+  return [
+    { rank: rank1, suit: suit1 },
+    { rank: rank2, suit: suit2 }
+  ];
+};
+
+/**
+ * Gets the action for a hand notation at a specific position
+ */
+export const getActionForHandNotation = (handNotation: string, pos: Position): Action => {
+  const range = preflopRanges[pos];
+  if (range.raise.includes(handNotation)) return 'raise';
+  if (range.call.includes(handNotation)) return 'call';
+  return 'fold';
+};
+
+/**
+ * Gets hand notation from row/col indices in the range chart
+ */
+export const getHandNotationFromGrid = (
+  rowIdx: number,
+  colIdx: number,
+  allRanks: Rank[] = ['A', 'K', 'Q', 'J', 'T', '9', '8', '7', '6', '5', '4', '3', '2']
+): string => {
+  if (rowIdx === colIdx) {
+    return allRanks[rowIdx] + allRanks[colIdx]; // Pairs
+  } else if (rowIdx < colIdx) {
+    return allRanks[rowIdx] + allRanks[colIdx] + 's'; // Suited
+  } else {
+    return allRanks[colIdx] + allRanks[rowIdx] + 'o'; // Offsuit
+  }
+};
+
+/**
+ * Calculate accuracy percentage
+ */
+export const calculateAccuracy = (correct: number, total: number): number => {
+  if (total === 0) return 0;
+  return Math.round((correct / total) * 100);
+};

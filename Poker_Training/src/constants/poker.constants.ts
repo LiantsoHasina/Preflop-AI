@@ -6,7 +6,7 @@ export const ranks: Rank[] = ['2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 
 
 // Position Constants
 export const positions: PositionInfo[] = [
-  { value: 'EP', label: 'Early Position' },
+  { value: 'UTG', label: 'Under the Gun' },
   { value: 'MP', label: 'Middle Position' },
   { value: 'CO', label: 'Cutoff' },
   { value: 'BTN', label: 'Button' },
@@ -16,7 +16,7 @@ export const positions: PositionInfo[] = [
 
 // Preflop Ranges Constants
 export const preflopRanges: PreflopRanges = {
-  EP: {
+  UTG: {
     raise: ['AA', 'KK', 'QQ', 'JJ', 'TT', '99', 'AKs', 'AQs', 'AJs', 'AKo'],
     call: ['88', '77', 'ATs', 'KQs', 'AQo'],
     fold: 'default'
@@ -50,10 +50,60 @@ export const preflopRanges: PreflopRanges = {
 
 // Position Advantages Text
 export const positionAdvantages: Record<string, string> = {
-  EP: 'early position with many players left to act',
+  UTG: 'under the gun with many players left to act',
   MP: 'middle position with moderate positional advantage',
   CO: 'cutoff position with good positional advantage',
   BTN: 'button position with maximum positional advantage',
   SB: 'small blind position acting first postflop',
   BB: 'big blind position with money already invested'
+};
+
+// Chart ranks for range grid (high to low)
+export const CHART_RANKS: Rank[] = ['A', 'K', 'Q', 'J', 'T', '9', '8', '7', '6', '5', '4', '3', '2'];
+
+// Game Constants
+export const GAME_CONSTANTS = {
+  // Default chip stacks
+  defaultPlayerChips: 200,
+  defaultOpponentChips: 200,
+
+  // Betting scenario base pot sizes by street
+  basePot: {
+    flop: 10,
+    turn: 25,
+    river: 50
+  },
+
+  // Equity calculation multipliers (Rule of 2 and 4)
+  equityMultipliers: {
+    flop: 4,  // 2 cards to come
+    turn: 2,  // 1 card to come
+    river: 0  // No cards to come
+  },
+
+  // Draw strength thresholds for implied odds
+  drawStrength: {
+    weak: { minOuts: 0, multiplier: 1.0 },
+    medium: { minOuts: 6, multiplier: 1.25 },
+    strong: { minOuts: 9, multiplier: 1.5 }
+  },
+
+  // Common outs reference
+  commonOuts: {
+    pocketPairToSet: 2,
+    oneOvercard: 3,
+    gutshot: 4,
+    twoPairToFullHouse: 4,
+    twoOvercards: 6,
+    openEndedStraight: 8,
+    flushDraw: 9
+  }
+};
+
+// Betting round labels
+export const BETTING_ROUND_LABELS: Record<string, string> = {
+  preflop: 'Preflop',
+  flop: 'Flop',
+  turn: 'Turn',
+  river: 'River'
 };
