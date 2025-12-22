@@ -16,6 +16,8 @@ interface PracticeViewProps {
   onAction: (action: Action) => void;
   onNextHand: () => void;
   onViewInChart: () => void;
+  aiExplanation?: string;
+  isAnalyzing?: boolean;
 }
 
 export const PracticeView: React.FC<PracticeViewProps> = ({
@@ -28,7 +30,9 @@ export const PracticeView: React.FC<PracticeViewProps> = ({
   onPositionChange,
   onAction,
   onNextHand,
-  onViewInChart
+  onViewInChart,
+  aiExplanation,
+  isAnalyzing
 }) => {
   return (
     <div className={styles.container}>
@@ -62,20 +66,23 @@ export const PracticeView: React.FC<PracticeViewProps> = ({
             <button
               onClick={() => onAction('fold')}
               className={styles.foldButton}
+              disabled={isAnalyzing}
             >
-              Fold
+              {isAnalyzing ? 'Analyzing...' : 'Fold'}
             </button>
             <button
               onClick={() => onAction('call')}
               className={styles.callButton}
+              disabled={isAnalyzing}
             >
-              Call
+              {isAnalyzing ? 'Analyzing...' : 'Call'}
             </button>
             <button
               onClick={() => onAction('raise')}
               className={styles.raiseButton}
+              disabled={isAnalyzing}
             >
-              Raise
+              {isAnalyzing ? 'Analyzing...' : 'Raise'}
             </button>
           </div>
         ) : (
@@ -92,7 +99,7 @@ export const PracticeView: React.FC<PracticeViewProps> = ({
             <div className={styles.explanationBox}>
               <div className={styles.title}>Explanation:</div>
               <div className={styles.content}>
-                {feedback && getExplanation(currentHand, position, feedback.action)}
+                {aiExplanation || (feedback && getExplanation(currentHand, position, feedback.action))}
               </div>
             </div>
 

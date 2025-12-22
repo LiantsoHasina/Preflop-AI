@@ -1,0 +1,27 @@
+{
+  "name": "preflop-back",
+  "version": "1.0.0",
+  "description": "Backend API for Poker Preflop Trainer with Claude AI",
+  "main": "dist/server.js",
+  "scripts": {
+    "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js"
+  },
+  "keywords": ["poker", "api", "claude", "ai"],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.32.1",
+    "express": "^4.21.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/cors": "^2.8.17",
+    "@types/node": "^22.10.2",
+    "typescript": "^5.7.2",
+    "ts-node-dev": "^2.0.0"
+  }
+}

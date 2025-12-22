@@ -4,7 +4,8 @@
       "Bash(yarn init:*)",
       "Bash(yarn add:*)",
       "Bash(tree:*)",
-      "Bash(yarn build)"
+      "Bash(yarn build)",
+      "Bash(yarn install:*)"
     ],
     "deny": [],
     "ask": []

@@ -6,3 +6,4 @@ export { ChartsView } from './ChartsView';
 export { PokerPreflopTrainer } from './PokerPreflopTrainer';
 export { Modal } from './Modal';
 export { HandExplanationModal } from './Modal/HandExplanationModal';
+export { AISelectionModal } from './AISelectionModal/AISelectionModal';

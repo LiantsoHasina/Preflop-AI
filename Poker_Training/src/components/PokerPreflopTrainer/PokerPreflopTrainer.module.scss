@@ -14,7 +14,27 @@
       }
 
       .subtitle {
-        @apply text-gray-300;
+        @apply text-gray-300 mb-4;
+      }
+
+      .aiToggleContainer {
+        @apply flex justify-center mt-4;
+
+        .aiToggle {
+          @apply cursor-pointer flex items-center gap-3 bg-gray-800 px-6 py-3 rounded-lg border-2 border-gray-700 transition-all;
+
+          &:hover {
+            @apply border-blue-500 bg-gray-700;
+          }
+
+          .aiCheckbox {
+            @apply cursor-pointer w-5 h-5;
+          }
+
+          .aiLabel {
+            @apply text-white font-semibold text-lg;
+          }
+        }
       }
     }
 
