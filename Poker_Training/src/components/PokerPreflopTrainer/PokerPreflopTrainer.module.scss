@@ -7,7 +7,35 @@
     @apply max-w-4xl mx-auto;
 
     .header {
-      @apply text-center mb-6;
+      @apply text-center mb-6 relative;
+
+      .authSection {
+        @apply absolute top-0 right-0;
+
+        .userInfo {
+          @apply flex items-center gap-3;
+
+          .userEmail {
+            @apply text-gray-400 text-sm;
+          }
+
+          .logoutButton {
+            @apply bg-gray-700 text-gray-300 px-3 py-1.5 rounded text-sm cursor-pointer transition-all border border-gray-600;
+
+            &:hover {
+              @apply bg-gray-600 text-white;
+            }
+          }
+        }
+
+        .loginButton {
+          @apply bg-green-700 text-white px-4 py-2 rounded font-medium cursor-pointer transition-all;
+
+          &:hover {
+            @apply bg-green-600;
+          }
+        }
+      }
 
       .title {
         @apply text-4xl font-bold text-white mb-2;

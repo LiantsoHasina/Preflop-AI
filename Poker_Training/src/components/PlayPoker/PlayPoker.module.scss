@@ -1,0 +1,912 @@
+@use 'tailwindcss';
+
+// ========================================
+// Play Poker Container
+// ========================================
+.playPokerContainer {
+  @apply min-h-screen bg-gray-900 pb-8 flex flex-col;
+}
+
+.gameHeader {
+  @apply flex items-center justify-between px-6 py-4 bg-gray-800 border-b border-gray-700;
+
+  .backLink {
+    @apply text-gray-400 hover:text-white transition cursor-pointer bg-transparent border-none;
+  }
+
+  .handInfo {
+    @apply text-white font-bold text-lg;
+  }
+
+  .headerRight {
+    @apply flex items-center gap-4;
+  }
+
+  .blindsInfo {
+    @apply text-gray-400 text-sm;
+  }
+
+  .howToPlayButton {
+    @apply px-3 py-1.5 bg-purple-600 hover:bg-purple-700 text-white text-sm font-semibold rounded-lg cursor-pointer transition border-none;
+  }
+}
+
+// ========================================
+// Game Setup
+// ========================================
+.setupContainer {
+  @apply min-h-screen bg-gray-900 flex items-center justify-center p-4;
+}
+
+.setupCard {
+  @apply bg-gray-800 rounded-2xl p-8 max-w-md w-full shadow-2xl;
+}
+
+.setupHeader {
+  @apply flex justify-between items-center mb-8;
+}
+
+.setupTitle {
+  @apply text-2xl font-bold text-white text-center m-0;
+}
+
+.howToPlayButtonSetup {
+  @apply px-3 py-1.5 bg-purple-600 hover:bg-purple-700 text-white text-sm font-semibold rounded-lg cursor-pointer transition border-none;
+}
+
+.settingGroup {
+  @apply mb-6;
+
+  .label {
+    @apply block text-white font-semibold mb-2;
+  }
+
+  .hint {
+    @apply text-gray-500 text-xs mt-1 block;
+  }
+}
+
+.textInput {
+  @apply w-full bg-gray-700 text-white px-4 py-3 rounded-lg border border-gray-600 focus:border-purple-500 focus:outline-none;
+}
+
+.numberInput {
+  @apply bg-gray-700 text-white px-4 py-2 rounded-lg border border-gray-600 focus:border-purple-500 focus:outline-none w-24;
+}
+
+.playerCountSelector {
+  @apply flex gap-2 flex-wrap;
+
+  .countButton {
+    @apply w-10 h-10 rounded-lg bg-gray-700 text-white font-bold cursor-pointer border-2 border-transparent transition;
+
+    &:hover {
+      @apply border-gray-500;
+    }
+
+    &.active {
+      @apply bg-purple-600 border-purple-400;
+    }
+  }
+}
+
+.presetButtons {
+  @apply flex gap-2 mb-3;
+
+  .presetButton {
+    @apply px-4 py-2 rounded-lg bg-gray-700 text-white text-sm cursor-pointer border-2 border-transparent transition;
+
+    &:hover {
+      @apply border-gray-500;
+    }
+
+    &.active {
+      @apply bg-purple-600 border-purple-400;
+    }
+  }
+}
+
+.blindInputs {
+  @apply flex gap-4;
+
+  .blindInput {
+    @apply flex items-center gap-2;
+
+    span {
+      @apply text-gray-400;
+    }
+  }
+}
+
+.gameSummary {
+  @apply bg-gray-700 rounded-lg p-4 mb-6;
+
+  .summaryItem {
+    @apply flex justify-between text-gray-300 py-1;
+
+    span:last-child {
+      @apply text-white font-semibold;
+    }
+  }
+}
+
+.setupActions {
+  @apply flex gap-4;
+
+  .backButton {
+    @apply flex-1 py-3 rounded-lg bg-gray-700 text-white font-semibold cursor-pointer transition;
+
+    &:hover {
+      @apply bg-gray-600;
+    }
+  }
+
+  .startButton {
+    @apply flex-1 py-3 rounded-lg bg-purple-600 text-white font-bold cursor-pointer transition;
+
+    &:hover {
+      @apply bg-purple-700;
+    }
+  }
+}
+
+// ========================================
+// Poker Table
+// ========================================
+.tableContainer {
+  @apply p-4 flex-1 flex justify-center items-center;
+}
+
+.table {
+  @apply relative mx-auto bg-green-800 rounded-full border-8 border-yellow-900 shadow-2xl;
+  width: min(90vw, 800px);
+  height: min(60vw, 500px);
+  min-height: 400px;
+}
+
+.potArea {
+  @apply absolute left-1/2 bottom-[110%] transform -translate-x-1/2 text-center;
+
+  .potLabel {
+    @apply text-green-300 text-sm uppercase tracking-wider;
+  }
+
+  .potAmount {
+    @apply text-yellow-400 text-3xl font-bold;
+  }
+}
+
+.communityCards {
+  @apply absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 flex gap-2;
+}
+
+.cardPlaceholder {
+  @apply w-12 h-16 bg-green-950 rounded-lg border-2 border-dashed border-green-700 opacity-50;
+}
+
+.roundIndicator {
+  @apply absolute left-1/2 bottom-[calc(125%/4)] transform -translate-x-1/2 bg-purple-600 text-white px-4 py-1 rounded-full text-sm font-bold;
+}
+
+.handCompleteActions {
+  @apply flex justify-center gap-4 mt-6;
+}
+
+.viewResultsButton {
+  @apply px-6 py-3 bg-purple-600 text-white text-lg font-bold rounded-lg cursor-pointer transition;
+
+  &:hover {
+    @apply bg-purple-700;
+  }
+}
+
+.nextHandButton {
+  @apply px-6 py-3 bg-green-600 text-white text-lg font-bold rounded-lg cursor-pointer transition;
+
+  &:hover {
+    @apply bg-green-700;
+  }
+}
+
+.winnerAnnouncement {
+  @apply absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-black/80 text-white p-6 rounded-xl text-center z-20;
+
+  .winnerName {
+    @apply text-2xl font-bold text-yellow-400 mb-2 block;
+  }
+
+  .winnerHand {
+    @apply text-lg text-gray-300 mb-2 block;
+  }
+
+  .winnerAmount {
+    @apply text-xl text-green-400 font-bold block;
+  }
+}
+
+// Player seats
+.seatWrapper {
+  @apply absolute transform -translate-x-1/2 -translate-y-1/2 z-10;
+}
+
+.playerSeat {
+  @apply bg-gray-800 rounded-xl p-2 min-w-24 text-center border-2 border-gray-700 transition-all;
+
+  &.currentTurn {
+    @apply border-yellow-500 shadow-lg shadow-yellow-500/30;
+    animation: pulse 1.5s infinite;
+  }
+
+  &.winner {
+    @apply border-green-500 bg-green-900/50;
+  }
+
+  &.folded {
+    @apply opacity-50;
+  }
+
+  &.allIn {
+    @apply border-red-500;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(234, 179, 8, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(234, 179, 8, 0);
+  }
+}
+
+.playerInfo {
+  .playerName {
+    @apply text-white font-semibold text-sm truncate max-w-20;
+
+    .youTag {
+      @apply text-yellow-400 text-xs ml-1;
+    }
+  }
+
+  .playerChips {
+    @apply text-green-400 font-bold text-sm;
+  }
+}
+
+.positionBadges {
+  @apply flex justify-center gap-1 mt-1;
+
+  .dealerBadge {
+    @apply w-5 h-5 rounded-full bg-white text-black text-xs font-bold flex items-center justify-center;
+  }
+
+  .sbBadge, .bbBadge {
+    @apply text-xs px-1 rounded bg-gray-600 text-gray-300;
+  }
+}
+
+.playerCards {
+  @apply flex justify-center gap-1 mt-2;
+}
+
+.cardBack {
+  @apply w-10 h-14 rounded bg-blue-800 border border-blue-600;
+}
+
+.playerBet {
+  @apply absolute -bottom-6 left-1/2 transform -translate-x-1/2 bg-yellow-600 text-black px-2 py-0.5 rounded text-xs font-bold;
+}
+
+.statusOverlay {
+  @apply absolute inset-0 bg-black/60 rounded-xl flex items-center justify-center text-white font-bold text-sm;
+}
+
+// ========================================
+// Betting Controls
+// ========================================
+.bettingControls {
+  @apply bg-gray-800 p-4 mx-4 rounded-xl mt-4;
+}
+
+.waitingMessage {
+  @apply text-center text-gray-400 py-4;
+}
+
+.betInfo {
+  @apply flex justify-center gap-8 mb-4;
+
+  .betInfoItem {
+    @apply text-center;
+
+    .betLabel {
+      @apply text-gray-400 text-sm block;
+    }
+
+    .betValue {
+      @apply text-white font-bold text-lg;
+    }
+  }
+}
+
+.actionButtons {
+  @apply flex justify-center gap-3 mb-4;
+
+  .actionButton {
+    @apply px-6 py-3 rounded-lg font-bold text-white cursor-pointer transition transform;
+
+    &:hover:not(:disabled) {
+      @apply scale-105;
+    }
+
+    &:disabled {
+      @apply opacity-50 cursor-not-allowed;
+    }
+  }
+
+  .foldButton {
+    @apply bg-red-600 hover:bg-red-700;
+  }
+
+  .checkButton {
+    @apply bg-blue-600 hover:bg-blue-700;
+  }
+
+  .callButton {
+    @apply bg-yellow-600 hover:bg-yellow-700 text-black;
+  }
+
+  .raiseButton {
+    @apply bg-green-600 hover:bg-green-700;
+  }
+
+  .allInButton {
+    @apply bg-red-600;
+
+    &:hover:not(:disabled) {
+      @apply bg-red-700;
+    }
+  }
+}
+
+.raiseControls {
+  @apply bg-gray-700 rounded-lg p-4;
+}
+
+.raiseSlider {
+  @apply flex items-center gap-4 mb-4;
+
+  .slider {
+    @apply flex-1 h-2 bg-gray-600 rounded-lg appearance-none cursor-pointer;
+
+    &::-webkit-slider-thumb {
+      @apply appearance-none w-5 h-5 bg-purple-500 rounded-full cursor-pointer;
+    }
+  }
+
+  .sliderLabel {
+    @apply text-gray-400 text-sm whitespace-nowrap;
+  }
+}
+
+.potShortcuts {
+  @apply flex justify-center gap-2 mb-4;
+
+  .shortcutButton {
+    @apply px-4 py-2 bg-gray-600 text-white rounded-lg cursor-pointer transition;
+
+    &:hover {
+      @apply bg-gray-500;
+    }
+  }
+}
+
+.customAmount {
+  @apply flex items-center justify-center gap-2;
+
+  span {
+    @apply text-gray-400;
+  }
+
+  .amountInput {
+    @apply w-28 bg-gray-600 text-white px-3 py-2 rounded-lg text-center;
+  }
+}
+
+// ========================================
+// Hand Analysis
+// ========================================
+.analysisContainer {
+  @apply p-4;
+}
+
+.analysisCard {
+  @apply bg-gray-800 rounded-xl p-6 max-w-3xl mx-auto;
+}
+
+.analysisHeader {
+  @apply flex justify-between items-center mb-6;
+}
+
+.analysisTitle {
+  @apply text-2xl font-bold text-white;
+}
+
+.viewTableButton {
+  @apply px-4 py-2 bg-gray-600 text-white rounded-lg cursor-pointer transition;
+
+  &:hover {
+    @apply bg-gray-500;
+  }
+}
+
+.tableViewHeader {
+  @apply flex items-center gap-4 mb-4;
+}
+
+.tableViewTitle {
+  @apply text-xl font-bold text-white;
+}
+
+.backToAnalysisButton {
+  @apply px-4 py-2 bg-gray-700 text-white rounded-lg cursor-pointer transition;
+
+  &:hover {
+    @apply bg-gray-600;
+  }
+}
+
+.tableViewActions {
+  @apply flex justify-center gap-4 mt-4;
+}
+
+.winnerSection {
+  @apply flex justify-center gap-6 mb-6;
+}
+
+.winnerDisplay {
+  @apply text-center bg-yellow-900/50 rounded-xl p-4 border border-yellow-600;
+
+  .winnerName {
+    @apply text-yellow-400 font-bold text-lg block mb-1;
+  }
+
+  .winnerHand {
+    @apply text-white text-sm block mb-2;
+  }
+
+  .winnerCards {
+    @apply flex justify-center gap-1 mb-2;
+  }
+
+  .winnerPot {
+    @apply text-green-400 font-bold block;
+  }
+}
+
+.finalBoard {
+  @apply flex items-center justify-center gap-4 mb-6 py-4 border-y border-gray-700;
+
+  .boardLabel {
+    @apply text-gray-400;
+  }
+
+  .boardCards {
+    @apply flex gap-1;
+  }
+}
+
+.actionBreakdown {
+  @apply mb-6;
+
+  h3 {
+    @apply text-white font-semibold mb-3;
+  }
+}
+
+.roundSection {
+  @apply mb-2;
+}
+
+.roundHeader {
+  @apply w-full flex justify-between items-center bg-gray-700 px-4 py-2 rounded-lg cursor-pointer transition;
+
+  &:hover {
+    @apply bg-gray-600;
+  }
+
+  &.expanded {
+    @apply rounded-b-none;
+  }
+
+  .roundName {
+    @apply text-white font-semibold;
+  }
+
+  .actionCount {
+    @apply text-gray-400 text-sm;
+  }
+}
+
+.roundActions {
+  @apply rounded-b-lg overflow-hidden;
+  background-color: rgba(55, 65, 81, 0.5);
+}
+
+.actionItem {
+  @apply px-4 py-3 border-b border-gray-700 last:border-b-0;
+
+  &.humanAction {
+    @apply bg-purple-900/30;
+  }
+}
+
+.actionHeader {
+  @apply flex justify-between items-center;
+
+  .playerName {
+    @apply text-white font-semibold;
+  }
+
+  .actionType {
+    @apply text-gray-300;
+  }
+}
+
+.actionAnalysis {
+  @apply mt-2 p-2 rounded-lg;
+
+  .qualityBadge {
+    @apply text-xs font-bold uppercase px-2 py-0.5 rounded inline-block mb-1;
+  }
+
+  .lessonText {
+    @apply text-sm;
+  }
+}
+
+.qualityGood {
+  @apply bg-green-900/50 text-green-300;
+
+  .qualityBadge {
+    @apply bg-green-600 text-white;
+  }
+}
+
+.qualityNeutral {
+  @apply bg-gray-700 text-gray-300;
+
+  .qualityBadge {
+    @apply bg-gray-600 text-gray-200;
+  }
+}
+
+.qualityPoor {
+  @apply bg-red-900/50 text-red-300;
+
+  .qualityBadge {
+    @apply bg-red-600 text-white;
+  }
+}
+
+.cpuReasoning {
+  @apply text-gray-500 text-sm mt-1;
+}
+
+.lessonsSection {
+  @apply bg-purple-900/30 rounded-lg p-4 mb-6;
+
+  h3 {
+    @apply text-purple-300 font-semibold mb-3;
+  }
+
+  .lessonsList {
+    @apply space-y-2 text-gray-300;
+
+    li {
+      @apply pl-4 relative;
+
+      &::before {
+        content: '→';
+        @apply absolute left-0 text-purple-400;
+      }
+    }
+  }
+}
+
+.analysisActions {
+  @apply flex gap-4;
+
+  .continueButton {
+    @apply flex-1 py-3 rounded-lg bg-green-600 text-white font-bold cursor-pointer transition;
+
+    &:hover {
+      @apply bg-green-700;
+    }
+  }
+
+  .newGameButton {
+    @apply flex-1 py-3 rounded-lg bg-gray-600 text-white font-bold cursor-pointer transition;
+
+    &:hover {
+      @apply bg-gray-500;
+    }
+  }
+}
+
+// ========================================
+// Game Over
+// ========================================
+.gameOverContainer {
+  @apply min-h-screen bg-gray-900 flex items-center justify-center p-4;
+}
+
+.gameOverCard {
+  @apply bg-gray-800 rounded-2xl p-8 max-w-md w-full text-center;
+
+  .gameOverTitle {
+    @apply text-3xl font-bold text-white mb-4;
+  }
+
+  .gameOverMessage {
+    @apply text-gray-300 text-lg mb-2;
+  }
+
+  .handCount {
+    @apply text-gray-500 mb-6;
+  }
+
+  .newGameButton {
+    @apply w-full py-3 rounded-lg bg-green-600 text-white font-bold cursor-pointer mb-3 transition;
+
+    &:hover {
+      @apply bg-green-700;
+    }
+  }
+
+  .backButton {
+    @apply w-full py-3 rounded-lg bg-gray-700 text-white font-bold cursor-pointer transition;
+
+    &:hover {
+      @apply bg-gray-600;
+    }
+  }
+}
+
+// ========================================
+// Game Sidebars - Horizontal Sliding Panels
+// ========================================
+
+// Toggle buttons on edges
+.panelToggle {
+  @apply fixed top-1/2 transform -translate-y-1/2 z-30 bg-gray-800 text-white py-4 px-2 cursor-pointer transition-all flex flex-col items-center gap-1;
+
+  &:hover {
+    @apply bg-gray-700;
+  }
+
+  .toggleLabel {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    @apply text-xs font-semibold;
+  }
+}
+
+.leftToggle {
+  @apply left-0 rounded-r-lg;
+}
+
+.rightToggle {
+  @apply right-0 rounded-l-lg;
+}
+
+// Side panels
+.sidePanel {
+  @apply fixed top-16 bottom-0 z-20 bg-gray-800 shadow-2xl overflow-y-auto transition-transform duration-300;
+  width: 33.333%;
+
+  &.leftPanel {
+    @apply left-0;
+    transform: translateX(-100%);
+  }
+
+  &.rightPanel {
+    @apply right-0;
+    transform: translateX(100%);
+  }
+
+  &.panelOpen {
+    transform: translateX(0);
+  }
+}
+
+.panelHeader {
+  @apply flex justify-between items-center px-4 py-3 bg-gray-700 sticky top-0 z-10;
+
+  h3 {
+    @apply text-white font-bold text-lg m-0;
+  }
+}
+
+.closePanel {
+  @apply w-8 h-8 flex items-center justify-center bg-gray-600 text-white rounded cursor-pointer transition;
+
+  &:hover {
+    @apply bg-gray-500;
+  }
+}
+
+.panelContent {
+  @apply p-4;
+}
+
+// Preflop Chart - Larger version
+.miniChart {
+  @apply mb-4;
+
+  table {
+    @apply w-full border-collapse;
+
+    td {
+      @apply text-center border border-gray-700 cursor-default;
+      aspect-ratio: 1;
+      font-size: 10px;
+      padding: 2px;
+      @apply text-white font-medium;
+    }
+  }
+}
+
+.miniRaise {
+  @apply bg-green-600 text-white;
+}
+
+.miniCall {
+  @apply bg-yellow-600 text-white;
+}
+
+.miniFold {
+  @apply bg-red-900/60 text-white;
+}
+
+.miniHighlighted {
+  @apply ring-2 ring-white ring-inset;
+  animation: pulseHighlight 1s ease-in-out infinite;
+}
+
+@keyframes pulseHighlight {
+  0%, 100% {
+    box-shadow: inset 0 0 0 2px white;
+  }
+  50% {
+    box-shadow: inset 0 0 0 3px yellow;
+  }
+}
+
+.chartLegendLarge {
+  @apply flex justify-center gap-6 mt-4 py-3 border-t border-gray-700;
+
+  .legendItem {
+    @apply flex items-center gap-2 text-sm text-white;
+  }
+
+  .legendColorRaise {
+    @apply w-4 h-4 rounded bg-green-600;
+  }
+
+  .legendColorCall {
+    @apply w-4 h-4 rounded bg-yellow-600;
+  }
+
+  .legendColorFold {
+    @apply w-4 h-4 rounded bg-red-900;
+  }
+}
+
+.currentHandInfo {
+  @apply bg-gray-700 p-4 rounded-lg text-white mt-4;
+
+  strong {
+    @apply text-yellow-400 text-lg;
+  }
+
+  .recommendedAction {
+    @apply block mt-2 text-gray-300;
+
+    strong {
+      @apply text-green-400;
+    }
+  }
+}
+
+// Analysis Sections
+.analysisSection {
+  @apply mb-5 pb-5 border-b border-gray-700 last:border-b-0 last:pb-0;
+
+  h4 {
+    @apply text-white font-semibold mb-3;
+  }
+}
+
+.statsGrid {
+  @apply grid grid-cols-2 gap-3;
+}
+
+.statItem {
+  @apply bg-gray-700 p-3 rounded-lg text-center;
+
+  .statLabel {
+    @apply block text-gray-400 text-sm mb-1;
+  }
+
+  .statValue {
+    @apply block text-white font-bold text-lg;
+  }
+}
+
+.equityBar {
+  @apply relative h-8 bg-gray-700 rounded-full overflow-hidden;
+
+  .equityFill {
+    @apply absolute left-0 top-0 h-full bg-green-600 transition-all;
+  }
+
+  .equityLabel {
+    @apply absolute inset-0 flex items-center justify-center text-white text-sm font-bold;
+  }
+}
+
+.equityNote {
+  @apply text-sm mt-3 text-gray-300;
+}
+
+.cpuRanges {
+  @apply space-y-3;
+}
+
+.noCpu {
+  @apply text-gray-500 italic;
+}
+
+.cpuRange {
+  @apply bg-gray-700 p-3 rounded-lg;
+
+  .cpuHeader {
+    @apply flex justify-between items-center mb-2;
+  }
+
+  .cpuName {
+    @apply text-white font-semibold;
+  }
+
+  .cpuChips {
+    @apply text-green-400 text-sm;
+  }
+
+  .cpuDetails {
+    .rangeStrength {
+      @apply inline-block bg-purple-600 text-white text-xs px-2 py-1 rounded mb-2;
+    }
+
+    .rangeDescription {
+      @apply text-gray-300 text-sm m-0;
+    }
+  }
+}
+
+// Game content wrapper - adapts to panels
+.gameContentWrapper {
+  @apply flex-1 transition-all duration-300 flex flex-col justify-between;
+}
+
+.gameContentWrapper.leftOpen {
+  margin-left: 33.333%;
+}
+
+.gameContentWrapper.rightOpen {
+  margin-right: 33.333%;
+}
+
+.gameContentWrapper.bothOpen {
+  margin-left: 33.333%;
+  margin-right: 33.333%;
+}

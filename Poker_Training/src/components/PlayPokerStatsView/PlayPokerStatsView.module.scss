@@ -1,0 +1,209 @@
+@use 'tailwindcss';
+
+.container {
+  @apply space-y-6;
+
+  .guestWarning {
+    @apply bg-yellow-900/30 border border-yellow-600/50 text-yellow-200 px-4 py-3 rounded-lg text-center text-sm;
+  }
+
+  .loading {
+    @apply text-center text-gray-400 py-8;
+  }
+
+  .sectionHeader {
+    @apply border-b border-gray-700 pb-2 mt-8 first:mt-0;
+
+    h2 {
+      @apply text-white text-lg font-bold;
+    }
+  }
+
+  .summaryCards {
+    @apply grid grid-cols-2 gap-4;
+
+    @media (min-width: 768px) {
+      @apply grid-cols-4;
+    }
+
+    .statCard {
+      @apply bg-gray-800 rounded-lg p-4 text-center;
+
+      .value {
+        @apply text-2xl font-bold;
+
+        @media (min-width: 768px) {
+          @apply text-3xl;
+        }
+
+        &.positive {
+          @apply text-green-400;
+        }
+
+        &.negative {
+          @apply text-red-400;
+        }
+
+        &.games {
+          @apply text-blue-400;
+        }
+
+        &.hands {
+          @apply text-cyan-400;
+        }
+
+        &.pot {
+          @apply text-yellow-400;
+        }
+      }
+
+      .label {
+        @apply text-white text-sm mt-1;
+      }
+    }
+  }
+
+  .chartsRow {
+    @apply grid grid-cols-1 gap-6;
+
+    @media (min-width: 768px) {
+      @apply grid-cols-2;
+    }
+  }
+
+  .chartSection {
+    @apply bg-gray-800 rounded-lg p-6;
+
+    .title {
+      @apply text-white text-xl font-bold mb-4;
+    }
+
+    .noData {
+      @apply flex items-center justify-center h-full text-gray-500;
+    }
+
+    .showdownSummary {
+      @apply text-center mb-4;
+
+      .showdownRate {
+        @apply flex flex-col items-center;
+
+        .rateValue {
+          @apply text-4xl font-bold text-green-400;
+        }
+
+        .rateLabel {
+          @apply text-gray-400 text-sm;
+        }
+      }
+
+      .showdownCount {
+        @apply text-gray-400 text-sm mt-2;
+      }
+    }
+
+    .performanceGrid {
+      @apply grid grid-cols-1 gap-4;
+
+      .perfItem {
+        @apply flex justify-between items-center bg-gray-700 rounded-lg p-3;
+
+        .perfLabel {
+          @apply text-gray-400;
+        }
+
+        .perfValue {
+          @apply text-white font-bold text-lg;
+        }
+      }
+    }
+  }
+
+  .qualityCards {
+    @apply grid grid-cols-1 gap-4;
+
+    @media (min-width: 768px) {
+      @apply grid-cols-2;
+    }
+
+    .qualityCard {
+      @apply bg-gray-800 rounded-lg p-4;
+
+      .qualityHeader {
+        @apply flex justify-between items-center mb-2;
+
+        .qualityTitle {
+          @apply text-white font-medium;
+        }
+
+        .qualityValue {
+          @apply text-2xl font-bold;
+
+          &.good {
+            @apply text-green-400;
+          }
+
+          &.ok {
+            @apply text-yellow-400;
+          }
+
+          &.poor {
+            @apply text-red-400;
+          }
+        }
+      }
+
+      .progressBar {
+        @apply w-full h-2 bg-gray-700 rounded-full overflow-hidden mb-2;
+
+        .progressFill {
+          @apply h-full bg-green-500 transition-all duration-300;
+        }
+      }
+
+      .qualityDetail {
+        @apply text-gray-400 text-sm;
+      }
+    }
+  }
+
+  .advancedCards {
+    @apply grid grid-cols-1 gap-4;
+
+    @media (min-width: 768px) {
+      @apply grid-cols-2;
+    }
+
+    .advancedCard {
+      @apply bg-gray-800 rounded-lg p-4 flex items-center gap-4;
+
+      .advancedIcon {
+        @apply text-4xl;
+      }
+
+      .advancedInfo {
+        @apply flex-1;
+
+        .advancedTitle {
+          @apply text-gray-400 text-sm;
+        }
+
+        .advancedValue {
+          @apply text-3xl font-bold;
+
+          &.good {
+            @apply text-green-400;
+          }
+
+          &.poor {
+            @apply text-orange-400;
+          }
+        }
+
+        .advancedDetail {
+          @apply text-gray-500 text-sm;
+        }
+      }
+    }
+  }
+}

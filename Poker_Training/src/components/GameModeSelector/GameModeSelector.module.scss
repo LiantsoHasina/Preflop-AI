@@ -15,7 +15,7 @@
 }
 
 .modal {
-  @apply bg-gray-800 rounded-xl shadow-2xl max-w-4xl w-full max-h-[95vh] overflow-y-auto;
+  @apply bg-gray-800 rounded-xl shadow-2xl max-w-4xl w-full max-h-[95vh] overflow-y-auto relative;
   animation: slideIn 0.4s ease-out;
 
   @keyframes slideIn {
@@ -29,15 +29,93 @@
     }
   }
 
+  .authSection {
+    @apply absolute top-4 right-4 z-10;
+
+    .userInfo {
+      @apply flex items-center gap-3;
+
+      .userEmail {
+        @apply text-gray-400 text-sm;
+      }
+
+      .logoutButton {
+        @apply text-gray-400 hover:text-white text-sm bg-transparent border border-gray-600 hover:border-gray-400 px-3 py-1 rounded-lg cursor-pointer transition;
+      }
+    }
+
+    .signInButton {
+      @apply bg-green-600 hover:bg-green-700 text-white font-semibold px-4 py-2 rounded-lg cursor-pointer transition border-none;
+    }
+  }
+
   .header {
-    @apply text-center p-8 pb-4;
+    @apply text-center p-6 pb-4 pt-8;
 
     .title {
-      @apply text-3xl font-bold text-white mb-3;
+      @apply text-3xl font-bold text-white mb-2;
     }
 
     .subtitle {
-      @apply text-gray-400 text-lg;
+      @apply text-gray-400 text-base;
+    }
+  }
+
+  // Featured Play Poker Card
+  .featuredCard {
+    @apply relative mx-6 mb-4 p-6 rounded-2xl cursor-pointer transition-all duration-300 overflow-hidden text-left bg-gray-900 border-2 border-purple-600;
+
+    &:hover {
+      @apply border-purple-400 bg-gray-800;
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(147, 51, 234, 0.2);
+    }
+
+    .featuredContent {
+      @apply relative z-10;
+    }
+
+    .featuredIconWrapper {
+      @apply flex items-center gap-3 mb-3;
+
+      .featuredIcon {
+        @apply text-5xl;
+      }
+
+      .newBadge {
+        @apply bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider;
+      }
+    }
+
+    .featuredTitle {
+      @apply text-2xl font-bold text-white mb-2;
+    }
+
+    .featuredDescription {
+      @apply text-gray-300 mb-4;
+    }
+
+    .featuredFeatures {
+      @apply flex gap-3 flex-wrap;
+
+      span {
+        @apply bg-white/10 text-white text-sm px-3 py-1 rounded-full;
+      }
+    }
+  }
+
+  // Divider
+  .divider {
+    @apply flex items-center gap-4 mx-6 my-4;
+
+    &::before,
+    &::after {
+      content: '';
+      @apply flex-1 h-px bg-gray-700;
+    }
+
+    span {
+      @apply text-gray-500 text-sm uppercase tracking-wider;
     }
   }
 

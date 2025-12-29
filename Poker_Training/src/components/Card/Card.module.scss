@@ -18,4 +18,30 @@
   .suit {
     @apply text-4xl;
   }
+
+  // Small size for table view
+  &.small {
+    @apply w-12 h-16;
+
+    .rank {
+      @apply text-lg;
+    }
+
+    .suit {
+      @apply text-xl;
+    }
+  }
+
+  // Large size if needed
+  &.large {
+    @apply w-24 h-32;
+
+    .rank {
+      @apply text-4xl;
+    }
+
+    .suit {
+      @apply text-5xl;
+    }
+  }
 }

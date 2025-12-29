@@ -3,7 +3,7 @@ import type { Position, Action } from '../../types';
 import { positions } from '../../constants';
 import { getExplanation, convertHandNotationToCards, getActionForHandNotation } from '../../utils';
 import { Modal } from './Modal';
-import styles from './Modal.module.scss';
+import styles from './HandExplanationModal.module.scss';
 
 interface HandExplanationModalProps {
   isOpen: boolean;
@@ -49,7 +49,7 @@ export const HandExplanationModal: React.FC<HandExplanationModalProps> = ({
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="Hand Analysis">
+    <Modal isOpen={isOpen} onClose={onClose} title="Hand Analysis" size="lg">
       <div className={styles.handInfo}>
         <div className={styles.handNotation}>
           <span className={styles.notation}>{hand}</span>

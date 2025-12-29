@@ -1,5 +1,9 @@
+// AI SERVICE TEMPORARILY DISABLED - Searching for better option
+// Uncomment when ready to re-enable AI functionality
+
+/*
 import Anthropic from '@anthropic-ai/sdk';
-import { HandAnalysisRequest, HandAnalysisResponse, Action } from '../types/poker.types';
+import { HandAnalysisRequest, HandAnalysisResponse, Action, Card } from '../types/poker.types';
 
 export class ClaudeAIService {
   private client: Anthropic;
@@ -16,9 +20,6 @@ export class ClaudeAIService {
     });
   }
 
-  /**
-   * Analyzes a poker hand using Claude AI
-   */
   async analyzeHand(request: HandAnalysisRequest): Promise<HandAnalysisResponse> {
     const prompt = this.buildPrompt(request);
 
@@ -34,7 +35,6 @@ export class ClaudeAIService {
         ]
       });
 
-      // Extract text content from the response
       const textContent = message.content.find(block => block.type === 'text');
       if (!textContent || textContent.type !== 'text') {
         throw new Error('No text response from Claude');
@@ -42,7 +42,6 @@ export class ClaudeAIService {
 
       const responseText = textContent.text;
 
-      // Parse the JSON response
       const jsonMatch = responseText.match(/\{[\s\S]*\}/);
       if (!jsonMatch) {
         throw new Error('Could not parse JSON from Claude response');
@@ -50,7 +49,6 @@ export class ClaudeAIService {
 
       const analysis: HandAnalysisResponse = JSON.parse(jsonMatch[0]);
 
-      // Validate the response
       if (!this.isValidAction(analysis.action)) {
         throw new Error(`Invalid action received: ${analysis.action}`);
       }
@@ -62,9 +60,6 @@ export class ClaudeAIService {
     }
   }
 
-  /**
-   * Builds the prompt for Claude AI
-   */
   private buildPrompt(request: HandAnalysisRequest): string {
     const { hand, position } = request;
     const handNotation = this.getHandNotation(hand);
@@ -94,9 +89,6 @@ Be specific about why this action is correct from ${position}. Reference poker c
 Respond ONLY with the JSON object, no additional text.`;
   }
 
-  /**
-   * Converts hand array to poker notation
-   */
   private getHandNotation(hand: Card[]): string {
     if (!hand || hand.length !== 2) return 'Invalid';
 
@@ -115,10 +107,15 @@ Respond ONLY with the JSON object, no additional text.`;
     return higherRank + lowerRank + 'o';
   }
 
-  /**
-   * Validates if the action is valid
-   */
   private isValidAction(action: string): action is Action {
     return ['raise', 'call', 'fold'].includes(action);
+  }
+}
+*/
+
+// Placeholder export to prevent import errors
+export class ClaudeAIService {
+  async analyzeHand(): Promise<never> {
+    throw new Error('AI service is temporarily disabled');
   }
 }

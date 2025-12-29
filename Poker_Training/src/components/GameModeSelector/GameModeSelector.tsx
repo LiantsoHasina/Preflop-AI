@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import type { GameMode } from '../../types';
+import { useAuth } from '../../context/AuthContext';
+import { AuthModal } from '../AuthModal/AuthModal';
 import styles from './GameModeSelector.module.scss';
 
 interface GameModeSelectorProps {
@@ -8,16 +10,63 @@ interface GameModeSelectorProps {
 }
 
 export const GameModeSelector: React.FC<GameModeSelectorProps> = ({ isOpen, onSelect }) => {
+  const { user, isAuthenticated, logout } = useAuth();
+  const [showAuthModal, setShowAuthModal] = useState(false);
+
   if (!isOpen) return null;
 
   return (
     <div className={styles.overlay}>
       <div className={styles.modal}>
+        {/* Auth Section */}
+        <div className={styles.authSection}>
+          {isAuthenticated ? (
+            <div className={styles.userInfo}>
+              <span className={styles.userEmail}>{user?.email}</span>
+              <button onClick={logout} className={styles.logoutButton}>
+                Sign Out
+              </button>
+            </div>
+          ) : (
+            <button onClick={() => setShowAuthModal(true)} className={styles.signInButton}>
+              Sign In
+            </button>
+          )}
+        </div>
+
         <div className={styles.header}>
-          <h2 className={styles.title}>Choose Training Mode</h2>
+          <h2 className={styles.title}>Choose Your Mode</h2>
           <p className={styles.subtitle}>
-            Select what aspects of poker you'd like to practice
+            Train your skills or play a real poker game
           </p>
+        </div>
+
+        <AuthModal isOpen={showAuthModal} onClose={() => setShowAuthModal(false)} />
+
+        {/* Featured Play Poker Mode */}
+        <button
+          className={`${styles.featuredCard} ${styles.playPokerOption}`}
+          onClick={() => onSelect('play-poker')}
+        >
+          <div className={styles.featuredContent}>
+            <div className={styles.featuredIconWrapper}>
+              <span className={styles.featuredIcon}>🎰</span>
+              <span className={styles.newBadge}>NEW</span>
+            </div>
+            <h3 className={styles.featuredTitle}>Play Real Poker</h3>
+            <p className={styles.featuredDescription}>
+              Play a full poker game against CPU opponents with real betting, showdowns, and post-hand analysis
+            </p>
+            <div className={styles.featuredFeatures}>
+              <span>2-9 Players</span>
+              <span>Custom Blinds</span>
+              <span>Full Analysis</span>
+            </div>
+          </div>
+        </button>
+
+        <div className={styles.divider}>
+          <span>or practice specific skills</span>
         </div>
 
         <div className={styles.options}>
@@ -26,16 +75,11 @@ export const GameModeSelector: React.FC<GameModeSelectorProps> = ({ isOpen, onSe
             onClick={() => onSelect('preflop-only')}
           >
             <div className={styles.icon}>🎯</div>
-            <h3 className={styles.optionTitle}>Preflop Only</h3>
+            <h3 className={styles.optionTitle}>Preflop Training</h3>
             <p className={styles.optionDescription}>
-              Focus exclusively on preflop decisions and range selection
+              Master opening ranges and position-based strategy
             </p>
-            <ul className={styles.features}>
-              <li>Master opening ranges</li>
-              <li>Learn position-based strategy</li>
-              <li>Quick practice sessions</li>
-            </ul>
-            <span className={styles.badge}>Classic Mode</span>
+            <span className={styles.badge}>Classic</span>
           </button>
 
           <button
@@ -43,16 +87,11 @@ export const GameModeSelector: React.FC<GameModeSelectorProps> = ({ isOpen, onSe
             onClick={() => onSelect('full-game')}
           >
             <div className={styles.icon}>♠️</div>
-            <h3 className={styles.optionTitle}>Full Game (Preflop + Postflop)</h3>
+            <h3 className={styles.optionTitle}>Full Hand Training</h3>
             <p className={styles.optionDescription}>
-              Complete hand training including flop, turn, and river decisions
+              Complete preflop + postflop decision training
             </p>
-            <ul className={styles.features}>
-              <li>Pot odds calculations</li>
-              <li>Outs counting practice</li>
-              <li>Complete street-by-street play</li>
-            </ul>
-            <span className={styles.badge}>Recommended</span>
+            <span className={styles.badge}>Complete</span>
           </button>
 
           <button
@@ -60,26 +99,17 @@ export const GameModeSelector: React.FC<GameModeSelectorProps> = ({ isOpen, onSe
             onClick={() => onSelect('postflop-only')}
           >
             <div className={styles.icon}>🃏</div>
-            <h3 className={styles.optionTitle}>Postflop Only</h3>
+            <h3 className={styles.optionTitle}>Postflop Training</h3>
             <p className={styles.optionDescription}>
-              Skip preflop and jump straight into postflop scenarios
+              Focus on pot odds and drawing decisions
             </p>
-            <ul className={styles.features}>
-              <li>Focus on pot odds decisions</li>
-              <li>Practice drawing situations</li>
-              <li>Master equity calculations</li>
-            </ul>
-            <span className={styles.badge}>Quick Practice</span>
+            <span className={styles.badge}>Focused</span>
           </button>
         </div>
 
         <div className={styles.footer}>
-          <p className={styles.note}>
-            Preflop focuses on opening ranges. Full Game includes all streets.
-            Postflop Only skips preflop for focused pot odds practice.
-          </p>
           <p className={styles.changeNote}>
-            You can restart with a different mode anytime.
+            You can switch modes anytime from the menu.
           </p>
         </div>
       </div>

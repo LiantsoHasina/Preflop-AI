@@ -7,7 +7,8 @@
       "Bash(yarn build)",
       "Bash(yarn install:*)",
       "Bash(find:*)",
-      "Bash(npm run build:*)"
+      "Bash(npm run build:*)",
+      "Bash(npx tsc:*)"
     ],
     "deny": [],
     "ask": []

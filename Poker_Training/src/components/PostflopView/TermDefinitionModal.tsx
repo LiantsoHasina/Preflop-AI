@@ -1,4 +1,5 @@
 import React from 'react';
+import { Modal } from '../Modal/Modal';
 import styles from './TermDefinitionModal.module.scss';
 
 export type TermType = 'outs' | 'equity' | 'potOdds' | 'equityNeeded' | 'impliedOdds';
@@ -132,19 +133,19 @@ export const TermDefinitionModal: React.FC<TermDefinitionModalProps> = ({
   term,
   onClose
 }) => {
-  if (!isOpen || !term) return null;
+  if (!term) return null;
 
   const definition = termDefinitions[term];
 
   return (
-    <div className={styles.overlay} onClick={onClose}>
-      <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
-        <button className={styles.closeButton} onClick={onClose}>
-          &times;
-        </button>
-
-        <h2 className={styles.title}>{definition.title}</h2>
-
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      title={definition.title}
+      size="lg"
+      showFooter={false}
+    >
+      <div className={styles.sections}>
         <div className={styles.section}>
           <h3 className={styles.sectionTitle}>Simple Explanation</h3>
           <p className={styles.text}>{definition.beginnerExplanation}</p>
@@ -169,6 +170,6 @@ export const TermDefinitionModal: React.FC<TermDefinitionModalProps> = ({
           </div>
         )}
       </div>
-    </div>
+    </Modal>
   );
 };

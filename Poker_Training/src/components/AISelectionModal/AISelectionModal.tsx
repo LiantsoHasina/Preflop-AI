@@ -1,5 +1,8 @@
-import React from 'react';
-import styles from './AISelectionModal.module.scss';
+// AI SELECTION MODAL TEMPORARILY DISABLED - Searching for better option
+// This modal is now hidden and always returns false (static ranges)
+
+import React, { useEffect } from 'react';
+// import styles from './AISelectionModal.module.scss';
 
 interface AISelectionModalProps {
   isOpen: boolean;
@@ -7,6 +10,17 @@ interface AISelectionModalProps {
 }
 
 export const AISelectionModal: React.FC<AISelectionModalProps> = ({ isOpen, onSelect }) => {
+  // AI DISABLED - Auto-select static ranges and don't show modal
+  useEffect(() => {
+    if (isOpen) {
+      onSelect(false); // Always use static ranges
+    }
+  }, [isOpen, onSelect]);
+
+  // Don't render anything - AI is disabled
+  return null;
+
+  /* ORIGINAL AI SELECTION MODAL - Uncomment when ready
   if (!isOpen) return null;
 
   return (
@@ -68,4 +82,5 @@ export const AISelectionModal: React.FC<AISelectionModalProps> = ({ isOpen, onSe
       </div>
     </div>
   );
+  */
 };

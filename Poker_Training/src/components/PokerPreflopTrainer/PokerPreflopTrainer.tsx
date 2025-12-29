@@ -28,13 +28,23 @@ import {
   PostflopView,
   PostflopChartsView,
   StatsView,
+  PostflopStatsView,
+  FullGameStatsView,
   ChartsView,
   AISelectionModal,
-  GameModeSelector
+  AuthModal,
+  GameModeSelector,
+  PlayPoker
 } from '../../components';
+import { useAuth } from '../../context/AuthContext';
+import { usePreflopProgression, usePostflopProgression, useFullGameProgression } from '../../hooks/useProgression';
 import styles from './PokerPreflopTrainer.module.scss';
 
 export const PokerPreflopTrainer: React.FC = () => {
+  // Auth State
+  const { user, isAuthenticated, logout } = useAuth();
+  const [showAuthModal, setShowAuthModal] = useState<boolean>(false);
+
   // Preflop State
   const [currentHand, setCurrentHand] = useState<Card[]>([]);
   const [position, setPosition] = useState<Position>('BTN');
@@ -64,6 +74,11 @@ export const PokerPreflopTrainer: React.FC = () => {
   // Game Mode State
   const [gameMode, setGameMode] = useState<GameMode | null>(null);
   const [showGameModeSelector, setShowGameModeSelector] = useState<boolean>(true);
+
+  // Progression hooks
+  const { updateProgress: updatePreflopProgress } = usePreflopProgression();
+  const { updateProgress: updatePostflopProgress } = usePostflopProgression();
+  const { updateProgress: updateFullGameProgress } = useFullGameProgression();
 
   // Postflop State
   const [bettingRound, setBettingRound] = useState<BettingRound>('preflop');
@@ -103,6 +118,12 @@ export const PokerPreflopTrainer: React.FC = () => {
     if (mode === 'postflop-only') {
       startPostflopOnly();
     }
+    // play-poker mode is handled separately in the render
+  };
+
+  const handleBackFromPlayPoker = (): void => {
+    setGameMode(null);
+    setShowGameModeSelector(true);
   };
 
   const startPostflopOnly = (): void => {
@@ -200,19 +221,27 @@ export const PokerPreflopTrainer: React.FC = () => {
     // Determine if the action is correct
     const correctAction = postflopAnalysis.recommendedAction;
     const isCorrect = action === correctAction;
+    const newStreak = isCorrect ? streak + 1 : 0;
 
     // Update stats
     setTotalHands(totalHands + 1);
 
     if (isCorrect) {
       setScore(score + 10);
-      setStreak(streak + 1);
+      setStreak(newStreak);
       setCorrectAnswers(correctAnswers + 1);
-      if (streak + 1 > bestStreak) {
-        setBestStreak(streak + 1);
+      if (newStreak > bestStreak) {
+        setBestStreak(newStreak);
       }
     } else {
       setStreak(0);
+    }
+
+    // Save progression based on game mode
+    if (gameMode === 'postflop-only') {
+      updatePostflopProgress(bettingRound, action, isCorrect, newStreak);
+    } else if (gameMode === 'full-game') {
+      updateFullGameProgress('postflop', isCorrect, newStreak, undefined, bettingRound);
     }
 
     // Set feedback
@@ -247,6 +276,7 @@ export const PokerPreflopTrainer: React.FC = () => {
       }
 
       const isCorrect: boolean = action === correctAction;
+      const newStreak = isCorrect ? streak + 1 : 0;
 
       setTotalHands(totalHands + 1);
 
@@ -260,15 +290,22 @@ export const PokerPreflopTrainer: React.FC = () => {
 
       if (isCorrect) {
         setScore(score + 10);
-        setStreak(streak + 1);
+        setStreak(newStreak);
         setCorrectAnswers(correctAnswers + 1);
-        if (streak + 1 > bestStreak) {
-          setBestStreak(streak + 1);
+        if (newStreak > bestStreak) {
+          setBestStreak(newStreak);
         }
         setFeedback({ type: 'correct', action: correctAction });
       } else {
         setStreak(0);
         setFeedback({ type: 'incorrect', action: correctAction });
+      }
+
+      // Save progression based on game mode
+      if (gameMode === 'preflop-only' || !gameMode) {
+        updatePreflopProgress(position, isCorrect, newStreak);
+      } else if (gameMode === 'full-game') {
+        updateFullGameProgress('preflop', isCorrect, newStreak, position);
       }
 
       setShowExplanation(true);
@@ -280,6 +317,7 @@ export const PokerPreflopTrainer: React.FC = () => {
       setAIExplanation(explanation);
 
       const isCorrect: boolean = action === correctAction;
+      const newStreak = isCorrect ? streak + 1 : 0;
       setTotalHands(totalHands + 1);
 
       setPositionStats(prev => ({
@@ -292,15 +330,22 @@ export const PokerPreflopTrainer: React.FC = () => {
 
       if (isCorrect) {
         setScore(score + 10);
-        setStreak(streak + 1);
+        setStreak(newStreak);
         setCorrectAnswers(correctAnswers + 1);
-        if (streak + 1 > bestStreak) {
-          setBestStreak(streak + 1);
+        if (newStreak > bestStreak) {
+          setBestStreak(newStreak);
         }
         setFeedback({ type: 'correct', action: correctAction });
       } else {
         setStreak(0);
         setFeedback({ type: 'incorrect', action: correctAction });
+      }
+
+      // Save progression even on error fallback
+      if (gameMode === 'preflop-only' || !gameMode) {
+        updatePreflopProgress(position, isCorrect, newStreak);
+      } else if (gameMode === 'full-game') {
+        updateFullGameProgress('preflop', isCorrect, newStreak, position);
       }
 
       setShowExplanation(true);
@@ -371,6 +416,11 @@ export const PokerPreflopTrainer: React.FC = () => {
     }
   };
 
+  // If in play-poker mode, render the PlayPoker component
+  if (gameMode === 'play-poker') {
+    return <PlayPoker onBack={handleBackFromPlayPoker} />;
+  }
+
   return (
     <div className={styles.app}>
       <GameModeSelector
@@ -383,11 +433,33 @@ export const PokerPreflopTrainer: React.FC = () => {
           onSelect={handleAISelection}
         />
       )}
+      <AuthModal
+        isOpen={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
+      />
       <div className={styles.container}>
         <div className={styles.header}>
+          <div className={styles.authSection}>
+            {isAuthenticated ? (
+              <div className={styles.userInfo}>
+                <span className={styles.userEmail}>{user?.email}</span>
+                <button onClick={logout} className={styles.logoutButton}>
+                  Logout
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={() => setShowAuthModal(true)}
+                className={styles.loginButton}
+              >
+                Sign In
+              </button>
+            )}
+          </div>
           <h1 className={styles.title}>{getTitle()}</h1>
           <p className={styles.subtitle}>{getSubtitle()}</p>
           <div className={styles.aiToggleContainer}>
+            {/* AI TOGGLE TEMPORARILY DISABLED - Searching for better option
             <label className={styles.aiToggle}>
               <input
                 type="checkbox"
@@ -399,6 +471,7 @@ export const PokerPreflopTrainer: React.FC = () => {
                 {useAI ? '🤖 AI Mode (Claude)' : '📊 Static Ranges'}
               </span>
             </label>
+            */}
             <button
               onClick={() => setShowGameModeSelector(true)}
               className={styles.changeModeButton}
@@ -421,12 +494,14 @@ export const PokerPreflopTrainer: React.FC = () => {
           >
             Stats
           </button>
-          <button
-            onClick={() => setView('charts')}
-            className={`${styles.tab} ${view === 'charts' ? styles.active : styles.inactive}`}
-          >
-            Charts
-          </button>
+          {gameMode !== 'full-game' && (
+            <button
+              onClick={() => setView('charts')}
+              className={`${styles.tab} ${view === 'charts' ? styles.active : styles.inactive}`}
+            >
+              Charts
+            </button>
+          )}
         </div>
 
         {view === 'practice' && !isInPostflop && (
@@ -465,7 +540,22 @@ export const PokerPreflopTrainer: React.FC = () => {
           />
         )}
 
-        {view === 'stats' && (
+        {view === 'stats' && gameMode === 'postflop-only' && (
+          <PostflopStatsView
+            sessionTotalHands={totalHands}
+            sessionCorrectAnswers={correctAnswers}
+            sessionBestStreak={bestStreak}
+          />
+        )}
+
+        {view === 'stats' && gameMode === 'full-game' && (
+          <FullGameStatsView
+            sessionTotalHands={totalHands}
+            sessionBestStreak={bestStreak}
+          />
+        )}
+
+        {view === 'stats' && (gameMode === 'preflop-only' || !gameMode) && (
           <StatsView
             score={score}
             totalHands={totalHands}

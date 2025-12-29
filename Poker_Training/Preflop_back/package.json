@@ -8,20 +8,30 @@
     "build": "tsc",
     "start": "node dist/server.js"
   },
-  "keywords": ["poker", "api", "claude", "ai"],
+  "keywords": [
+    "poker",
+    "api",
+    "claude",
+    "ai"
+  ],
   "author": "",
   "license": "MIT",
   "dependencies": {
     "@anthropic-ai/sdk": "^0.32.1",
-    "express": "^4.21.2",
+    "bcryptjs": "^3.0.3",
     "cors": "^2.8.5",
-    "dotenv": "^16.4.7"
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.0.2"
   },
   "devDependencies": {
-    "@types/express": "^5.0.0",
+    "@types/bcryptjs": "^3.0.0",
     "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.0",
+    "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^22.10.2",
-    "typescript": "^5.7.2",
-    "ts-node-dev": "^2.0.0"
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.7.2"
   }
 }

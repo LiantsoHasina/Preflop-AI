@@ -1,3 +1,6 @@
+// AI SERVICE TEMPORARILY DISABLED - Searching for better option
+// Uncomment when ready to re-enable AI functionality
+
 import type { Card, Position, Action } from '../types';
 
 interface AIAnalysisResponse {
@@ -15,9 +18,13 @@ export class PokerAPIService {
   }
 
   /**
-   * Analyzes a poker hand using Claude AI backend
+   * AI analysis temporarily disabled
+   * Always throws error to trigger fallback to static ranges
    */
-  async analyzeHand(hand: Card[], position: Position): Promise<AIAnalysisResponse> {
+  async analyzeHand(_hand: Card[], _position: Position): Promise<AIAnalysisResponse> {
+    throw new Error('AI analysis is temporarily disabled. Using static ranges.');
+
+    /* ORIGINAL AI IMPLEMENTATION - Uncomment when ready
     try {
       const response = await fetch(`${this.baseUrl}/poker/analyze`, {
         method: 'POST',
@@ -37,6 +44,7 @@ export class PokerAPIService {
       console.error('Error analyzing hand with AI:', error);
       throw error;
     }
+    */
   }
 
   /**

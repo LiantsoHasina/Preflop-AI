@@ -1,26 +1,23 @@
 @use 'tailwindcss';
 
 .overlay {
-  @apply fixed inset-0 bg-black/50 flex items-center justify-center z-50;
+  @apply fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4;
+  backdrop-filter: blur(4px);
   animation: fadeIn 0.2s ease-out;
 
   @keyframes fadeIn {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
+    from { opacity: 0; }
+    to { opacity: 1; }
   }
 }
 
 .modal {
-  @apply bg-gray-800 rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto;
+  @apply bg-gray-800 rounded-2xl shadow-2xl w-full max-h-[90vh] overflow-hidden flex flex-col;
   animation: slideIn 0.3s ease-out;
 
   @keyframes slideIn {
     from {
-      transform: translateY(-50px);
+      transform: translateY(-20px);
       opacity: 0;
     }
     to {
@@ -28,104 +25,57 @@
       opacity: 1;
     }
   }
+}
 
-  .header {
-    @apply flex justify-between items-center p-6 border-b border-gray-700;
+// Size variants
+.sizeSm {
+  @apply max-w-sm;
+}
 
-    .title {
-      @apply text-2xl font-bold text-white;
-    }
+.sizeMd {
+  @apply max-w-lg;
+}
 
-    .closeButton {
-      @apply cursor-pointer text-gray-400 text-3xl transition-colors;
+.sizeLg {
+  @apply max-w-2xl;
+}
 
-      &:hover {
-        @apply text-white;
-      }
-    }
+.sizeXl {
+  @apply max-w-4xl;
+}
+
+.sizeFull {
+  @apply max-w-6xl;
+}
+
+.header {
+  @apply flex justify-between items-center px-6 py-4 bg-gray-900 border-b border-gray-700 flex-shrink-0;
+
+  .title {
+    @apply text-xl font-bold text-white m-0;
   }
 
-  .content {
-    @apply p-6;
-
-    .handInfo {
-      @apply mb-6;
-
-      .handNotation {
-        @apply text-center mb-4;
-
-        .notation {
-          @apply inline-block bg-gray-700 text-white px-6 py-3 rounded-lg text-3xl font-bold font-mono;
-        }
-      }
-
-      .details {
-        @apply grid grid-cols-2 gap-4 text-white;
-
-        .detailItem {
-          @apply bg-gray-700 p-3 rounded-lg;
-
-          .label {
-            @apply text-gray-400 text-sm mb-1;
-          }
-
-          .value {
-            @apply text-lg font-semibold;
-
-            &.raise {
-              @apply text-green-400;
-            }
-
-            &.call {
-              @apply text-yellow-400;
-            }
-
-            &.fold {
-              @apply text-red-400;
-            }
-          }
-
-          .positionSelect {
-            @apply cursor-pointer w-full bg-gray-600 text-white text-lg font-semibold px-3 py-2 rounded border-2 border-gray-500 transition-colors;
-
-            &:hover {
-              @apply bg-gray-500 border-gray-400;
-            }
-
-            &:focus {
-              @apply outline-none border-blue-500 bg-gray-600;
-            }
-
-            option {
-              @apply bg-gray-700 text-white;
-            }
-          }
-        }
-      }
-    }
-
-    .explanationBox {
-      @apply bg-gray-700 p-4 rounded-lg text-white;
-
-      .explanationTitle {
-        @apply font-bold mb-3 text-lg;
-      }
-
-      .explanationText {
-        @apply text-sm leading-relaxed text-gray-300;
-      }
-    }
+  .closeButton {
+    @apply w-10 h-10 flex items-center justify-center text-gray-400 hover:text-white hover:bg-gray-700 rounded-lg cursor-pointer transition text-2xl bg-transparent border-none leading-none;
   }
+}
 
-  .footer {
-    @apply p-6 border-t border-gray-700;
+.closeButtonAbsolute {
+  @apply absolute top-4 right-4 w-10 h-10 flex items-center justify-center text-gray-400 hover:text-white hover:bg-gray-700 rounded-lg cursor-pointer transition text-2xl bg-transparent border-none leading-none z-10;
+}
 
-    .closeFooterButton {
-      @apply cursor-pointer w-full bg-blue-600 text-white py-3 rounded-lg font-bold text-lg transition;
+.content {
+  @apply p-6 overflow-y-auto flex-1;
+}
 
-      &:hover {
-        @apply bg-blue-700;
-      }
+.footer {
+  @apply px-6 py-4 border-t border-gray-700 flex-shrink-0;
+
+  .closeFooterButton {
+    @apply cursor-pointer w-full bg-blue-600 text-white py-3 rounded-lg font-bold text-lg transition border-none;
+
+    &:hover {
+      @apply bg-blue-700;
     }
   }
 }

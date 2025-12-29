@@ -1,0 +1,57 @@
+@use 'tailwindcss';
+
+.grid {
+  @apply grid gap-4;
+
+  &.cols2 {
+    @apply grid-cols-2;
+  }
+
+  &.cols3 {
+    @apply grid-cols-3;
+  }
+
+  &.cols4 {
+    @apply grid-cols-2;
+
+    @media (min-width: 768px) {
+      @apply grid-cols-4;
+    }
+  }
+}
+
+.statCard {
+  @apply bg-gray-800 rounded-lg p-4 text-center;
+
+  .value {
+    @apply text-3xl font-bold;
+
+    &.accuracy {
+      @apply text-green-400;
+    }
+
+    &.hands {
+      @apply text-blue-400;
+    }
+
+    &.correct {
+      @apply text-emerald-400;
+    }
+
+    &.streak {
+      @apply text-purple-400;
+    }
+
+    &.winnings {
+      @apply text-yellow-400;
+    }
+
+    &.default {
+      @apply text-white;
+    }
+  }
+
+  .label {
+    @apply text-white text-sm mt-1;
+  }
+}
