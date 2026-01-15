@@ -1,4 +1,4 @@
-import type { Suit, Rank, PositionInfo, PreflopRanges } from '../types';
+import type { Suit, Rank, PositionInfo, PreflopRanges, PositionStats } from '../types';
 
 // Card Constants
 export const suits: Suit[] = ['♠', '♥', '♦', '♣'];
@@ -107,3 +107,18 @@ export const BETTING_ROUND_LABELS: Record<string, string> = {
   turn: 'Turn',
   river: 'River'
 };
+
+// Initial position stats for new games/sessions
+export const INITIAL_POSITION_STATS: PositionStats = {
+  UTG: { correct: 0, total: 0 },
+  MP: { correct: 0, total: 0 },
+  CO: { correct: 0, total: 0 },
+  BTN: { correct: 0, total: 0 },
+  SB: { correct: 0, total: 0 },
+  BB: { correct: 0, total: 0 }
+};
+
+/**
+ * Get numeric value of a rank for comparison (2=0, 3=1, ..., A=12)
+ */
+export const getRankValue = (rank: Rank): number => ranks.indexOf(rank);

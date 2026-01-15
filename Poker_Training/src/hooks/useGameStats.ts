@@ -1,14 +1,6 @@
 import { useState, useCallback } from 'react';
 import type { Position, PositionStats } from '../types';
-
-const initialPositionStats: PositionStats = {
-  UTG: { correct: 0, total: 0 },
-  MP: { correct: 0, total: 0 },
-  CO: { correct: 0, total: 0 },
-  BTN: { correct: 0, total: 0 },
-  SB: { correct: 0, total: 0 },
-  BB: { correct: 0, total: 0 }
-};
+import { INITIAL_POSITION_STATS } from '../constants';
 
 export const useGameStats = () => {
   const [score, setScore] = useState(0);
@@ -16,7 +8,7 @@ export const useGameStats = () => {
   const [bestStreak, setBestStreak] = useState(0);
   const [totalHands, setTotalHands] = useState(0);
   const [correctAnswers, setCorrectAnswers] = useState(0);
-  const [positionStats, setPositionStats] = useState<PositionStats>(initialPositionStats);
+  const [positionStats, setPositionStats] = useState<PositionStats>({ ...INITIAL_POSITION_STATS });
 
   const updateStats = useCallback((isCorrect: boolean, position: Position) => {
     setTotalHands((prev) => prev + 1);
@@ -50,7 +42,7 @@ export const useGameStats = () => {
     setBestStreak(0);
     setTotalHands(0);
     setCorrectAnswers(0);
-    setPositionStats(initialPositionStats);
+    setPositionStats({ ...INITIAL_POSITION_STATS });
   }, []);
 
   return {

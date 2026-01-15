@@ -7,7 +7,7 @@ export type View = 'practice' | 'stats' | 'charts';
 export type FeedbackType = 'correct' | 'incorrect';
 
 // Game Mode Types
-export type GameMode = 'preflop-only' | 'full-game' | 'postflop-only' | 'play-poker';
+export type GameMode = 'preflop-only' | 'full-game' | 'postflop-only' | 'play-poker' | 'multiplayer';
 export type BettingRound = 'preflop' | 'flop' | 'turn' | 'river';
 export type PostflopAction = 'check' | 'bet' | 'call' | 'raise' | 'fold';
 
@@ -262,4 +262,76 @@ export interface KeyMoment {
   playerAction: ActionRecord;
   analysis: string;
   improvement?: string;
+}
+
+// ==========================================
+// Online Multiplayer Types
+// ==========================================
+
+// Room/Table status
+export type RoomStatus = 'waiting' | 'playing' | 'finished';
+
+// Online player info
+export interface OnlinePlayer {
+  socketId: string;
+  name: string;
+  email: string;
+  seatIndex: number | null;
+  chips: number;
+  isReady: boolean;
+  isHost: boolean;
+  lastSeen: number;
+}
+
+// Room/Table settings
+export interface MultiplayerRoomSettings {
+  maxPlayers: number; // 2-9
+  buyIn: number;
+  smallBlind: number;
+  bigBlind: number;
+  timerEnabled: boolean;
+  timerSeconds: number; // 15, 30, 45, 60
+  isPrivate: boolean;
+}
+
+// Room/Table info
+export interface MultiplayerRoom {
+  roomCode: string;
+  hostId: string;
+  settings: MultiplayerRoomSettings;
+  players: OnlinePlayer[];
+  status: RoomStatus;
+  createdAt: number;
+  currentHandNumber: number;
+}
+
+// Socket events (client -> server)
+export interface ClientToServerEvents {
+  'room:create': (settings: MultiplayerRoomSettings) => void;
+  'room:join': (roomCode: string) => void;
+  'room:leave': () => void;
+  'room:start': () => void;
+  'room:kick': (socketId: string) => void;
+  'player:ready': (isReady: boolean) => void;
+  'player:seat': (seatIndex: number) => void;
+  'game:action': (action: MultiplayerAction, amount?: number) => void;
+}
+
+// Socket events (server -> client)
+export interface ServerToClientEvents {
+  'room:created': (room: MultiplayerRoom) => void;
+  'room:joined': (room: MultiplayerRoom) => void;
+  'room:updated': (room: MultiplayerRoom) => void;
+  'room:left': () => void;
+  'room:error': (message: string) => void;
+  'room:list': (rooms: MultiplayerRoom[]) => void;
+  'game:started': (gameState: PokerGameState) => void;
+  'game:updated': (gameState: PokerGameState) => void;
+  'game:ended': (winners: WinnerInfo[]) => void;
+  'timer:tick': (secondsLeft: number) => void;
+  'timer:expired': (socketId: string) => void;
+  'player:joined': (player: OnlinePlayer) => void;
+  'player:left': (socketId: string) => void;
+  'player:disconnected': (socketId: string) => void;
+  'player:reconnected': (socketId: string) => void;
 }

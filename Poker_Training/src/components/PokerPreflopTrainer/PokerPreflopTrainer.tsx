@@ -36,7 +36,9 @@ import {
   GameModeSelector,
   PlayPoker
 } from '../../components';
+import { MultiplayerLobby } from '../Multiplayer';
 import { useAuth } from '../../context/AuthContext';
+import { INITIAL_POSITION_STATS } from '../../constants';
 import { usePreflopProgression, usePostflopProgression, useFullGameProgression } from '../../hooks/useProgression';
 import styles from './PokerPreflopTrainer.module.scss';
 
@@ -56,14 +58,7 @@ export const PokerPreflopTrainer: React.FC = () => {
   const [feedback, setFeedback] = useState<Feedback | null>(null);
   const [showExplanation, setShowExplanation] = useState<boolean>(false);
   const [view, setView] = useState<View>('practice');
-  const [positionStats, setPositionStats] = useState<PositionStats>({
-    UTG: { correct: 0, total: 0 },
-    MP: { correct: 0, total: 0 },
-    CO: { correct: 0, total: 0 },
-    BTN: { correct: 0, total: 0 },
-    SB: { correct: 0, total: 0 },
-    BB: { correct: 0, total: 0 }
-  });
+  const [positionStats, setPositionStats] = useState<PositionStats>({ ...INITIAL_POSITION_STATS });
   const [chartPosition, setChartPosition] = useState<Position>('BTN');
   const [highlightedHand, setHighlightedHand] = useState<string | null>(null);
   const [useAI, setUseAI] = useState<boolean>(true);
@@ -238,8 +233,15 @@ export const PokerPreflopTrainer: React.FC = () => {
     }
 
     // Save progression based on game mode
+    // Map PostflopAction to the decision types accepted by progression service
+    const mapActionToDecisionType = (act: PostflopAction): 'call' | 'fold' | 'raise' => {
+      if (act === 'check') return 'call'; // check is passive like call
+      if (act === 'bet') return 'raise'; // bet is aggressive like raise
+      return act as 'call' | 'fold' | 'raise';
+    };
+
     if (gameMode === 'postflop-only') {
-      updatePostflopProgress(bettingRound, action, isCorrect, newStreak);
+      updatePostflopProgress(bettingRound, mapActionToDecisionType(action), isCorrect, newStreak);
     } else if (gameMode === 'full-game') {
       updateFullGameProgress('postflop', isCorrect, newStreak, undefined, bettingRound);
     }
@@ -419,6 +421,11 @@ export const PokerPreflopTrainer: React.FC = () => {
   // If in play-poker mode, render the PlayPoker component
   if (gameMode === 'play-poker') {
     return <PlayPoker onBack={handleBackFromPlayPoker} />;
+  }
+
+  // If in multiplayer mode, render the MultiplayerLobby component
+  if (gameMode === 'multiplayer') {
+    return <MultiplayerLobby onBack={handleBackFromPlayPoker} />;
   }
 
   return (

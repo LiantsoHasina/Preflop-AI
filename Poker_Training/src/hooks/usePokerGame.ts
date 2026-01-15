@@ -20,11 +20,13 @@ interface UsePokerGameResult {
   phase: GamePhase;
   isProcessing: boolean;
   handNumber: number;
+  error: string | null;
   startGame: (settings: PokerGameSettings) => void;
   handleAction: (action: MultiplayerAction, amount?: number) => void;
   continueToNextHand: () => void;
   startNewGame: () => void;
   viewResults: () => void;
+  clearError: () => void;
 }
 
 export function usePokerGame(): UsePokerGameResult {
@@ -32,6 +34,9 @@ export function usePokerGame(): UsePokerGameResult {
   const [phase, setPhase] = useState<GamePhase>('setup');
   const [isProcessing, setIsProcessing] = useState(false);
   const [handNumber, setHandNumber] = useState(0);
+  const [error, setError] = useState<string | null>(null);
+
+  const clearError = useCallback(() => setError(null), []);
 
   // Process CPU turns with real-time UI updates
   const processCPUTurns = useCallback(async (
@@ -102,10 +107,15 @@ export function usePokerGame(): UsePokerGameResult {
     setHandNumber(1);
     setIsProcessing(true);
 
-    processCPUTurns(withHand, setGameState).then(newState => {
-      setGameState(newState);
-      setIsProcessing(false);
-    });
+    processCPUTurns(withHand, setGameState)
+      .then(newState => {
+        setGameState(newState);
+        setIsProcessing(false);
+      })
+      .catch(err => {
+        setError(err instanceof Error ? err.message : 'Failed to process CPU turns');
+        setIsProcessing(false);
+      });
   }, [processCPUTurns]);
 
   // Handle human player action
@@ -113,8 +123,14 @@ export function usePokerGame(): UsePokerGameResult {
     if (!gameState || isProcessing) return;
 
     setIsProcessing(true);
+    setError(null);
 
-    const humanPlayer = gameState.players.find(p => p.isHuman)!;
+    const humanPlayer = gameState.players.find(p => p.isHuman);
+    if (!humanPlayer) {
+      setError('Human player not found');
+      setIsProcessing(false);
+      return;
+    }
     let newState = processAction(gameState, humanPlayer.id, action, amount || 0);
 
     // Check if betting round complete or hand over
@@ -145,10 +161,15 @@ export function usePokerGame(): UsePokerGameResult {
 
     setGameState(newState);
 
-    processCPUTurns(newState, setGameState).then(finalState => {
-      setGameState(finalState);
-      setIsProcessing(false);
-    });
+    processCPUTurns(newState, setGameState)
+      .then(finalState => {
+        setGameState(finalState);
+        setIsProcessing(false);
+      })
+      .catch(err => {
+        setError(err instanceof Error ? err.message : 'Failed to process CPU turns');
+        setIsProcessing(false);
+      });
   }, [gameState, isProcessing, processCPUTurns]);
 
   // Continue to next hand
@@ -174,10 +195,15 @@ export function usePokerGame(): UsePokerGameResult {
     setGameState(newHand);
     setPhase('playing');
 
-    processCPUTurns(newHand, setGameState).then(newState => {
-      setGameState(newState);
-      setIsProcessing(false);
-    });
+    processCPUTurns(newHand, setGameState)
+      .then(newState => {
+        setGameState(newState);
+        setIsProcessing(false);
+      })
+      .catch(err => {
+        setError(err instanceof Error ? err.message : 'Failed to process CPU turns');
+        setIsProcessing(false);
+      });
   }, [gameState, processCPUTurns]);
 
   // Start new game (reset)
@@ -185,6 +211,7 @@ export function usePokerGame(): UsePokerGameResult {
     setPhase('setup');
     setGameState(null);
     setHandNumber(0);
+    setError(null);
   }, []);
 
   // View analysis results
@@ -197,10 +224,12 @@ export function usePokerGame(): UsePokerGameResult {
     phase,
     isProcessing,
     handNumber,
+    error,
     startGame,
     handleAction,
     continueToNextHand,
     startNewGame,
-    viewResults
+    viewResults,
+    clearError
   };
 }

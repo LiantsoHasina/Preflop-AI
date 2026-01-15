@@ -1,10 +1,5 @@
 import type { Card, Rank, HandRank, EvaluatedHand } from '../types';
-import { ranks } from '../constants';
-
-/**
- * Get numeric value of a rank (2=0, 3=1, ..., A=12)
- */
-export const getRankNumericValue = (rank: Rank): number => ranks.indexOf(rank);
+import { getRankValue, ranks } from '../constants';
 
 /**
  * Get all 5-card combinations from 7 cards
@@ -68,7 +63,7 @@ const countRanks = (cards: Card[]): Map<Rank, number> => {
  * Evaluate a single 5-card hand
  */
 const evaluateFiveCards = (cards: Card[]): EvaluatedHand => {
-  const sortedValues = cards.map(c => getRankNumericValue(c.rank)).sort((a, b) => a - b);
+  const sortedValues = cards.map(c => getRankValue(c.rank)).sort((a, b) => a - b);
   const rankCounts = countRanks(cards);
   const counts = Array.from(rankCounts.values()).sort((a, b) => b - a);
 
@@ -109,10 +104,10 @@ const evaluateFiveCards = (cards: Card[]): EvaluatedHand => {
     const kicker = Array.from(rankCounts.entries()).find(([_, c]) => c === 1)![0];
     return {
       rank: 'four-of-a-kind',
-      rankValue: 7000 + getRankNumericValue(quadRank) * 13 + getRankNumericValue(kicker),
+      rankValue: 7000 + getRankValue(quadRank) * 13 + getRankValue(kicker),
       description: `Four of a Kind, ${quadRank}s`,
       bestFiveCards: cards,
-      kickers: [getRankNumericValue(kicker)]
+      kickers: [getRankValue(kicker)]
     };
   }
 
@@ -122,7 +117,7 @@ const evaluateFiveCards = (cards: Card[]): EvaluatedHand => {
     const pairRank = Array.from(rankCounts.entries()).find(([_, c]) => c === 2)![0];
     return {
       rank: 'full-house',
-      rankValue: 6000 + getRankNumericValue(tripRank) * 13 + getRankNumericValue(pairRank),
+      rankValue: 6000 + getRankValue(tripRank) * 13 + getRankValue(pairRank),
       description: `Full House, ${tripRank}s full of ${pairRank}s`,
       bestFiveCards: cards,
       kickers: []
@@ -156,11 +151,11 @@ const evaluateFiveCards = (cards: Card[]): EvaluatedHand => {
     const tripRank = Array.from(rankCounts.entries()).find(([_, c]) => c === 3)![0];
     const kickers = Array.from(rankCounts.entries())
       .filter(([_, c]) => c === 1)
-      .map(([r]) => getRankNumericValue(r))
+      .map(([r]) => getRankValue(r))
       .sort((a, b) => b - a);
     return {
       rank: 'three-of-a-kind',
-      rankValue: 3000 + getRankNumericValue(tripRank) * 169 + kickers[0] * 13 + kickers[1],
+      rankValue: 3000 + getRankValue(tripRank) * 169 + kickers[0] * 13 + kickers[1],
       description: `Three of a Kind, ${tripRank}s`,
       bestFiveCards: cards,
       kickers
@@ -171,15 +166,15 @@ const evaluateFiveCards = (cards: Card[]): EvaluatedHand => {
   if (counts[0] === 2 && counts[1] === 2) {
     const pairs = Array.from(rankCounts.entries())
       .filter(([_, c]) => c === 2)
-      .map(([r]) => getRankNumericValue(r))
+      .map(([r]) => getRankValue(r))
       .sort((a, b) => b - a);
     const kicker = Array.from(rankCounts.entries()).find(([_, c]) => c === 1)![0];
     return {
       rank: 'two-pair',
-      rankValue: 2000 + pairs[0] * 169 + pairs[1] * 13 + getRankNumericValue(kicker),
+      rankValue: 2000 + pairs[0] * 169 + pairs[1] * 13 + getRankValue(kicker),
       description: `Two Pair, ${ranks[pairs[0]]}s and ${ranks[pairs[1]]}s`,
       bestFiveCards: cards,
-      kickers: [getRankNumericValue(kicker)]
+      kickers: [getRankValue(kicker)]
     };
   }
 
@@ -188,11 +183,11 @@ const evaluateFiveCards = (cards: Card[]): EvaluatedHand => {
     const pairRank = Array.from(rankCounts.entries()).find(([_, c]) => c === 2)![0];
     const kickers = Array.from(rankCounts.entries())
       .filter(([_, c]) => c === 1)
-      .map(([r]) => getRankNumericValue(r))
+      .map(([r]) => getRankValue(r))
       .sort((a, b) => b - a);
     return {
       rank: 'pair',
-      rankValue: 1000 + getRankNumericValue(pairRank) * 2197 + kickers[0] * 169 + kickers[1] * 13 + kickers[2],
+      rankValue: 1000 + getRankValue(pairRank) * 2197 + kickers[0] * 169 + kickers[1] * 13 + kickers[2],
       description: `Pair of ${pairRank}s`,
       bestFiveCards: cards,
       kickers

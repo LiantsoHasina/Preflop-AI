@@ -1,39 +1,35 @@
 @use 'tailwindcss';
+@use '../../styles/mixins' as *;
 
 .container {
-  @apply space-y-6;
+  @include container;
 }
 
 .loading {
-  @apply text-center text-gray-400 py-8;
+  @include loading-state;
 }
 
 .chartsRow {
-  @apply grid grid-cols-1 gap-6;
-
-  @media (min-width: 768px) {
-    @apply grid-cols-2;
-  }
+  @include charts-row;
 }
 
 .chartSection {
-  @apply bg-gray-800 rounded-lg p-6;
+  @include card-section;
 
   .title {
-    @apply text-white text-xl font-bold mb-4;
+    @include section-title;
   }
 
   .noData {
-    @apply flex items-center justify-center text-gray-500;
-    height: 250px;
+    @include no-data(250px);
   }
 }
 
 .breakdownSection {
-  @apply bg-gray-800 rounded-lg p-6;
+  @include card-section;
 
   .title {
-    @apply text-white text-xl font-bold mb-4;
+    @include section-title;
   }
 
   .streetGrid {
@@ -47,7 +43,8 @@
       @apply bg-gray-700 rounded-lg overflow-hidden;
 
       .streetHeader {
-        @apply flex justify-between items-center px-4 py-3 border-l-4;
+        @include flex-between;
+        @apply px-4 py-3 border-l-4;
 
         .streetName {
           @apply text-white font-bold text-lg;
@@ -62,7 +59,7 @@
         @apply px-4 py-3 space-y-1;
 
         .detailRow {
-          @apply flex justify-between text-gray-300 text-sm;
+          @include detail-row;
         }
       }
     }

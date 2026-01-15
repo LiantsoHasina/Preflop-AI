@@ -3,7 +3,7 @@ import type { Position, BettingRound } from '../types';
 
 const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
 
-export type GameMode = 'preflop-only' | 'postflop-only' | 'full-game' | 'play-poker';
+export type GameMode = 'preflop-only' | 'postflop-only' | 'full-game' | 'play-poker' | 'multiplayer';
 
 export interface PreflopProgression {
   totalHands: number;
@@ -105,7 +105,8 @@ class ProgressionService {
         'preflop-only': null,
         'postflop-only': null,
         'full-game': null,
-        'play-poker': null
+        'play-poker': null,
+        'multiplayer': null
       };
     }
 
@@ -117,7 +118,8 @@ class ProgressionService {
         'preflop-only': null,
         'postflop-only': null,
         'full-game': null,
-        'play-poker': null
+        'play-poker': null,
+        'multiplayer': null
       };
     }
   }

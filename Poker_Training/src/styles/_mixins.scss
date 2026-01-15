@@ -1,0 +1,126 @@
+// Common mixins for the poker training app
+// These provide reusable patterns across components
+
+// Container with standard spacing
+@mixin container {
+  @apply space-y-6;
+}
+
+// Card/section base styling
+@mixin card-section {
+  @apply bg-gray-800 rounded-lg p-6;
+}
+
+// Secondary card styling (nested cards)
+@mixin card-inner {
+  @apply bg-gray-700 rounded-lg p-4;
+}
+
+// Section title styling
+@mixin section-title {
+  @apply text-white text-xl font-bold mb-4;
+}
+
+// Loading state
+@mixin loading-state {
+  @apply text-center text-gray-400 py-8;
+}
+
+// Stat card base
+@mixin stat-card {
+  @apply bg-gray-800 rounded-lg p-4 text-center;
+}
+
+// Stat value base
+@mixin stat-value {
+  @apply text-2xl font-bold;
+
+  @media (min-width: 768px) {
+    @apply text-3xl;
+  }
+}
+
+// Stat label
+@mixin stat-label {
+  @apply text-white text-sm mt-1;
+}
+
+// Responsive grid - 2 columns on mobile, customizable on desktop
+@mixin responsive-grid($cols: 2, $md-cols: 4, $lg-cols: null) {
+  @apply grid gap-4;
+  grid-template-columns: repeat($cols, minmax(0, 1fr));
+
+  @media (min-width: 768px) {
+    grid-template-columns: repeat($md-cols, minmax(0, 1fr));
+  }
+
+  @if $lg-cols {
+    @media (min-width: 1024px) {
+      grid-template-columns: repeat($lg-cols, minmax(0, 1fr));
+    }
+  }
+}
+
+// Charts row (2-column layout on desktop)
+@mixin charts-row {
+  @apply grid grid-cols-1 gap-6;
+
+  @media (min-width: 768px) {
+    @apply grid-cols-2;
+  }
+}
+
+// Progress bar
+@mixin progress-bar($bg-color: theme('colors.gray.600'), $height: 0.5rem) {
+  @apply w-full rounded-full overflow-hidden;
+  background-color: $bg-color;
+  height: $height;
+}
+
+@mixin progress-fill($color: theme('colors.green.500')) {
+  @apply h-full transition-all duration-300;
+  background-color: $color;
+}
+
+// Guest warning banner
+@mixin guest-warning {
+  @apply bg-yellow-900/30 border border-yellow-600/50 text-yellow-200 px-4 py-3 rounded-lg text-center text-sm;
+}
+
+// Common stat color classes
+// Usage: @include stat-color('score') outputs text-yellow-400
+@mixin stat-color($type) {
+  @if $type == 'score' {
+    @apply text-yellow-400;
+  } @else if $type == 'accuracy' or $type == 'overall' {
+    @apply text-green-400;
+  } @else if $type == 'hands' {
+    @apply text-blue-400;
+  } @else if $type == 'streak' {
+    @apply text-purple-400;
+  } @else if $type == 'preflop' {
+    @apply text-blue-400;
+  } @else if $type == 'postflop' {
+    @apply text-purple-400;
+  } @else if $type == 'cyan' {
+    @apply text-cyan-400;
+  } @else if $type == 'emerald' {
+    @apply text-emerald-400;
+  }
+}
+
+// No data placeholder
+@mixin no-data($height: 250px) {
+  @apply flex items-center justify-center text-gray-500;
+  height: $height;
+}
+
+// Flex row with space between
+@mixin flex-between {
+  @apply flex justify-between items-center;
+}
+
+// Position/detail row
+@mixin detail-row {
+  @apply flex justify-between text-gray-300 text-sm;
+}

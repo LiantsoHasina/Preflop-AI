@@ -2,7 +2,7 @@ import React from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar } from 'recharts';
 import { useAuth } from '../../context/AuthContext';
 import { useFullGameProgression } from '../../hooks/useProgression';
-import { positions } from '../../constants';
+import { positions, INITIAL_POSITION_STATS } from '../../constants';
 import styles from './FullGameStatsView.module.scss';
 
 interface FullGameStatsViewProps {
@@ -34,14 +34,7 @@ export const FullGameStatsView: React.FC<FullGameStatsViewProps> = ({
     ? Math.round(((preflopCorrect + postflopCorrect) / (preflopTotal + postflopTotal)) * 100)
     : 0;
 
-  const positionStats = progression?.positionStats || {
-    UTG: { correct: 0, total: 0 },
-    MP: { correct: 0, total: 0 },
-    CO: { correct: 0, total: 0 },
-    BTN: { correct: 0, total: 0 },
-    SB: { correct: 0, total: 0 },
-    BB: { correct: 0, total: 0 }
-  };
+  const positionStats = progression?.positionStats || INITIAL_POSITION_STATS;
 
   const streetStats = progression?.streetStats || {
     flop: { correct: 0, total: 0 },

@@ -9,12 +9,8 @@ import type {
   PostflopAction,
   PostflopGameState
 } from '../types';
-import { ranks, suits, GAME_CONSTANTS } from '../constants';
-
-/**
- * Get the numeric value of a rank for comparison
- */
-export const getRankValue = (rank: Rank): number => ranks.indexOf(rank);
+import { ranks, suits, GAME_CONSTANTS, getRankValue } from '../constants';
+import { calculatePotOdds, calculateEquityNeeded } from './math.utils';
 
 /**
  * Generate a full deck of 52 cards
@@ -265,21 +261,7 @@ export const getMadeHand = (
   return null;
 };
 
-/**
- * Calculate pot odds as a percentage
- * Pot odds = bet to call / (pot + bet to call)
- */
-export const calculatePotOdds = (pot: number, betToCall: number): number => {
-  if (betToCall === 0) return 0;
-  return (betToCall / (pot + betToCall)) * 100;
-};
-
-/**
- * Calculate equity needed to call based on pot odds
- */
-export const calculateEquityNeeded = (pot: number, betToCall: number): number => {
-  return calculatePotOdds(pot, betToCall);
-};
+// calculatePotOdds and calculateEquityNeeded have been moved to math.utils.ts
 
 /**
  * Calculate equity from outs using the rule of 2 and 4
@@ -379,8 +361,8 @@ export const analyzePostflop = (
   }
 
   // Calculate pot odds
-  const potOdds = calculatePotOdds(gameState.pot, gameState.betToCall);
-  const equityNeeded = calculateEquityNeeded(gameState.pot, gameState.betToCall);
+  const potOdds = calculatePotOdds(gameState.betToCall, gameState.pot);
+  const equityNeeded = calculateEquityNeeded(gameState.betToCall, gameState.pot);
   const equity = calculateEquityFromOuts(totalOuts, gameState.bettingRound);
 
   // Calculate implied odds (rough estimate based on stack sizes)

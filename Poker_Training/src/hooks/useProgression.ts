@@ -187,15 +187,23 @@ export function useAllProgressions() {
     'preflop-only': null,
     'postflop-only': null,
     'full-game': null,
-    'play-poker': null
+    'play-poker': null,
+    'multiplayer': null
   });
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   const loadAll = useCallback(async () => {
     setIsLoading(true);
-    const all = await progressionService.getAllProgressions();
-    setProgressions(all);
-    setIsLoading(false);
+    setError(null);
+    try {
+      const all = await progressionService.getAllProgressions();
+      setProgressions(all);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to load progressions');
+    } finally {
+      setIsLoading(false);
+    }
   }, []);
 
   useEffect(() => {
@@ -206,11 +214,12 @@ export function useAllProgressions() {
         'preflop-only': null,
         'postflop-only': null,
         'full-game': null,
-        'play-poker': null
+        'play-poker': null,
+        'multiplayer': null
       });
       setIsLoading(false);
     }
   }, [isAuthenticated, loadAll]);
 
-  return { progressions, isLoading, refresh: loadAll };
+  return { progressions, isLoading, error, refresh: loadAll };
 }

@@ -1,0 +1,594 @@
+@use 'tailwindcss';
+
+// Main container
+.container {
+  @apply min-h-screen bg-gray-900 text-white;
+}
+
+// Loading State
+.loadingState {
+  @apply flex flex-col items-center justify-center min-h-screen gap-4;
+
+  .spinner {
+    @apply w-12 h-12 border-4 border-cyan-500 border-t-transparent rounded-full animate-spin;
+  }
+
+  p {
+    @apply text-gray-400;
+  }
+}
+
+// Error State
+.errorState {
+  @apply flex flex-col items-center justify-center min-h-screen gap-4 px-4 text-center;
+
+  .errorIcon {
+    @apply w-16 h-16 rounded-full bg-red-500/20 text-red-400 flex items-center justify-center text-3xl font-bold;
+  }
+
+  h2 {
+    @apply text-2xl font-bold;
+  }
+
+  p {
+    @apply text-gray-400;
+  }
+
+  .errorActions {
+    @apply flex gap-4 mt-4;
+  }
+
+  .retryButton {
+    @apply px-6 py-3 bg-cyan-600 hover:bg-cyan-700 rounded-lg font-semibold transition;
+  }
+
+  .backButton {
+    @apply px-6 py-3 bg-gray-700 hover:bg-gray-600 rounded-lg font-semibold transition;
+  }
+}
+
+// Header
+.header {
+  @apply flex items-center justify-between p-4 bg-gray-800 border-b border-gray-700;
+
+  .backBtn {
+    @apply px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition;
+  }
+
+  .title {
+    @apply text-xl font-bold;
+  }
+
+  .userInfo {
+    @apply flex items-center gap-2 text-gray-400;
+
+    .connectionStatus {
+      @apply w-2 h-2 rounded-full bg-green-500;
+    }
+  }
+}
+
+// Content
+.content {
+  @apply max-w-4xl mx-auto p-6;
+}
+
+// Actions Section
+.actions {
+  @apply bg-gray-800 rounded-xl p-6 mb-6;
+
+  .joinSection {
+    h3 {
+      @apply text-lg font-semibold mb-3;
+    }
+
+    .joinInput {
+      @apply flex gap-3;
+    }
+
+    .codeInput {
+      @apply flex-1 px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white text-center text-xl tracking-widest uppercase focus:outline-none focus:border-cyan-500;
+    }
+
+    .joinBtn {
+      @apply px-6 py-3 bg-cyan-600 hover:bg-cyan-700 rounded-lg font-semibold transition disabled:opacity-50 disabled:cursor-not-allowed;
+    }
+  }
+
+  .divider {
+    @apply flex items-center gap-4 my-6;
+
+    &::before,
+    &::after {
+      content: '';
+      @apply flex-1 h-px bg-gray-600;
+    }
+
+    span {
+      @apply text-gray-500 text-sm uppercase;
+    }
+  }
+
+  .createBtn {
+    @apply w-full py-4 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 rounded-lg font-bold text-lg transition;
+  }
+
+  .errorMessage {
+    @apply text-red-400 text-sm mt-2;
+  }
+}
+
+// Public Rooms
+.publicRooms {
+  @apply bg-gray-800 rounded-xl p-6;
+
+  h3 {
+    @apply text-lg font-semibold mb-4;
+  }
+
+  .noRooms {
+    @apply text-center py-8;
+
+    p {
+      @apply text-gray-400;
+    }
+
+    .hint {
+      @apply text-gray-500 text-sm mt-2;
+    }
+  }
+
+  .roomList {
+    @apply space-y-3;
+  }
+
+  .roomCard {
+    @apply flex items-center justify-between p-4 bg-gray-700 rounded-lg;
+
+    .roomInfo {
+      @apply flex items-center gap-6;
+    }
+
+    .roomCode {
+      @apply font-mono font-bold text-cyan-400;
+    }
+
+    .roomPlayers {
+      @apply text-gray-300;
+    }
+
+    .roomBlinds {
+      @apply text-gray-400 text-sm;
+    }
+
+    .joinRoomBtn {
+      @apply px-4 py-2 bg-cyan-600 hover:bg-cyan-700 rounded-lg font-semibold transition disabled:opacity-50 disabled:cursor-not-allowed;
+    }
+  }
+}
+
+// Create Room Modal
+.modalOverlay {
+  @apply fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4;
+}
+
+.modal {
+  @apply bg-gray-800 rounded-xl max-w-md w-full max-h-[90vh] overflow-y-auto;
+
+  .modalHeader {
+    @apply flex items-center justify-between p-4 border-b border-gray-700;
+
+    h2 {
+      @apply text-xl font-bold;
+    }
+
+    .closeBtn {
+      @apply w-8 h-8 flex items-center justify-center bg-gray-700 hover:bg-gray-600 rounded-lg transition;
+    }
+  }
+
+  .form {
+    @apply p-4 space-y-5;
+  }
+
+  .formGroup {
+    label {
+      @apply block text-sm font-semibold mb-2;
+    }
+
+    .hint {
+      @apply text-gray-400 text-xs mt-2;
+    }
+  }
+
+  .toggleGroup {
+    @apply flex gap-2;
+
+    .toggleBtn {
+      @apply flex-1 py-2 px-4 bg-gray-700 rounded-lg transition;
+
+      &.active {
+        @apply bg-cyan-600;
+      }
+    }
+  }
+
+  .buttonGrid {
+    @apply grid grid-cols-4 gap-2;
+
+    .optionBtn {
+      @apply py-2 px-3 bg-gray-700 rounded-lg transition text-sm;
+
+      &.active {
+        @apply bg-cyan-600;
+      }
+    }
+  }
+
+  .numberInput {
+    @apply w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-cyan-500;
+  }
+
+  .checkboxLabel {
+    @apply flex items-center gap-2 cursor-pointer;
+
+    input {
+      @apply w-5 h-5 accent-cyan-500;
+    }
+  }
+
+  .formActions {
+    @apply flex gap-3 pt-4;
+
+    .cancelBtn {
+      @apply flex-1 py-3 bg-gray-700 hover:bg-gray-600 rounded-lg font-semibold transition;
+    }
+
+    .createBtn {
+      @apply flex-1 py-3 bg-cyan-600 hover:bg-cyan-700 rounded-lg font-semibold transition;
+    }
+  }
+}
+
+// Room View
+.roomContainer {
+  @apply min-h-screen bg-gray-900;
+}
+
+.roomHeader {
+  @apply flex items-center justify-between p-4 bg-gray-800 border-b border-gray-700;
+
+  .leaveBtn {
+    @apply px-4 py-2 bg-red-600 hover:bg-red-700 rounded-lg transition;
+  }
+
+  .roomCodeSection {
+    @apply flex items-center gap-2;
+
+    .roomCodeLabel {
+      @apply text-gray-400;
+    }
+
+    .roomCodeValue {
+      @apply flex items-center gap-2 px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg font-mono font-bold text-cyan-400 transition;
+
+      .copyIcon {
+        @apply text-xs text-gray-400;
+      }
+    }
+  }
+
+  .roomSettings {
+    @apply flex items-center gap-4 text-gray-400 text-sm;
+  }
+}
+
+.tableContainer {
+  @apply flex items-center justify-center p-8;
+  min-height: 60vh;
+}
+
+.pokerTable {
+  @apply relative w-full max-w-3xl aspect-[2/1] bg-gradient-to-br from-green-800 to-green-900 rounded-[50%] border-8 border-amber-800;
+  box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.5), 0 0 30px rgba(0, 0, 0, 0.5);
+
+  .tableCenter {
+    @apply absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center;
+
+    h3 {
+      @apply text-xl font-bold text-white/80;
+    }
+
+    .playerCount {
+      @apply text-green-300 mt-1;
+    }
+
+    .readyCount {
+      @apply text-yellow-300 text-sm;
+    }
+  }
+}
+
+.seat {
+  @apply absolute -translate-x-1/2 -translate-y-1/2;
+  width: 100px;
+
+  &.empty {
+    .emptySeat {
+      @apply p-3 bg-gray-700/50 rounded-lg border-2 border-dashed border-gray-600 text-center text-gray-500 text-sm;
+    }
+  }
+
+  &.occupied {
+    .playerSeat {
+      @apply relative p-3 bg-gray-800 rounded-lg border-2 border-gray-600 text-center;
+
+      &.ready {
+        @apply border-green-500;
+      }
+    }
+
+    .playerName {
+      @apply block text-sm font-semibold truncate;
+    }
+
+    .hostBadge {
+      @apply ml-1 text-xs text-yellow-400;
+    }
+
+    .playerChips {
+      @apply block text-xs text-gray-400;
+    }
+
+    .readyBadge {
+      @apply absolute -top-2 -right-2 px-2 py-0.5 bg-green-500 text-white text-xs rounded-full;
+    }
+
+    .kickBtn {
+      @apply absolute -top-2 -left-2 w-5 h-5 bg-red-500 hover:bg-red-600 rounded-full text-xs flex items-center justify-center transition;
+    }
+  }
+}
+
+.roomActions {
+  @apply flex justify-center p-6;
+
+  .startBtn {
+    @apply px-8 py-4 bg-green-600 hover:bg-green-700 rounded-xl font-bold text-lg transition disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .readyBtn {
+    @apply px-8 py-4 bg-yellow-600 hover:bg-yellow-700 rounded-xl font-bold text-lg transition;
+
+    &.isReady {
+      @apply bg-green-600 hover:bg-green-700;
+    }
+  }
+}
+
+.playerList {
+  @apply max-w-md mx-auto p-4 bg-gray-800 rounded-xl;
+
+  h4 {
+    @apply font-semibold mb-3;
+  }
+
+  ul {
+    @apply space-y-2;
+  }
+
+  li {
+    @apply flex items-center justify-between p-2 bg-gray-700 rounded-lg;
+
+    &.ready {
+      @apply border-l-4 border-green-500;
+    }
+
+    .name {
+      @apply font-medium;
+    }
+
+    .status {
+      @apply text-sm text-gray-400;
+    }
+  }
+}
+
+// Game Container
+.gameContainer {
+  @apply min-h-screen bg-gray-900 flex flex-col;
+}
+
+.gameHeader {
+  @apply flex items-center justify-between p-4 bg-gray-800 border-b border-gray-700;
+
+  .backBtn {
+    @apply px-4 py-2 bg-red-600 hover:bg-red-700 rounded-lg transition;
+  }
+
+  .gameInfo {
+    @apply flex items-center gap-6;
+
+    .bettingRound {
+      @apply text-lg font-bold text-cyan-400;
+    }
+
+    .pot {
+      @apply text-lg;
+    }
+  }
+
+  .timer {
+    @apply px-4 py-2 bg-gray-700 rounded-lg font-mono font-bold;
+
+    &.warning {
+      @apply bg-red-600 animate-pulse;
+    }
+  }
+}
+
+.gameTableContainer {
+  @apply flex-1 flex items-center justify-center p-4;
+}
+
+.gameTable {
+  @apply relative w-full max-w-4xl aspect-[2/1] bg-gradient-to-br from-green-800 to-green-900 rounded-[50%] border-8 border-amber-800;
+  box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.5);
+}
+
+.communityCards {
+  @apply absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex gap-2;
+
+  .noCards {
+    @apply text-white/50 text-lg;
+  }
+}
+
+.potDisplay {
+  @apply absolute top-[65%] left-1/2 -translate-x-1/2 text-center;
+
+  span {
+    @apply block text-lg font-bold text-yellow-400;
+  }
+
+  .currentBet {
+    @apply text-sm text-gray-300;
+  }
+}
+
+.gamePlayer {
+  @apply absolute -translate-x-1/2 -translate-y-1/2;
+  width: 120px;
+
+  &.folded {
+    @apply opacity-40;
+  }
+
+  &.active {
+    .playerInfo {
+      @apply ring-2 ring-yellow-400;
+    }
+  }
+
+  &.human {
+    .playerInfo {
+      @apply border-cyan-500;
+    }
+  }
+
+  .playerInfo {
+    @apply p-2 bg-gray-800 rounded-lg border-2 border-gray-600 text-center;
+
+    .playerName {
+      @apply block text-sm font-semibold truncate;
+    }
+
+    .dealerChip {
+      @apply ml-1 inline-block w-5 h-5 bg-white text-black text-xs rounded-full leading-5;
+    }
+
+    .playerChips {
+      @apply block text-xs text-gray-400;
+    }
+  }
+
+  .holeCards {
+    @apply flex gap-1 justify-center mt-1;
+  }
+
+  .cardBack {
+    @apply w-8 h-11 bg-blue-800 rounded border border-blue-600;
+  }
+
+  .playerBet {
+    @apply absolute -bottom-6 left-1/2 -translate-x-1/2 px-2 py-0.5 bg-yellow-600 text-white text-xs rounded-full;
+  }
+
+  .statusBadge {
+    @apply absolute -top-2 right-0 px-2 py-0.5 bg-gray-600 text-white text-xs rounded-full capitalize;
+  }
+}
+
+.actionControls {
+  @apply p-4 bg-gray-800 border-t border-gray-700;
+
+  .actionInfo {
+    @apply flex items-center justify-center gap-4 mb-4;
+
+    span {
+      @apply text-lg font-semibold;
+    }
+
+    .toCall {
+      @apply text-yellow-400;
+    }
+  }
+
+  .actionButtons {
+    @apply flex items-center justify-center gap-3 flex-wrap;
+  }
+
+  .actionBtn {
+    @apply px-6 py-3 rounded-lg font-bold transition;
+  }
+
+  .foldBtn {
+    @apply bg-gray-600 hover:bg-gray-500;
+  }
+
+  .checkBtn {
+    @apply bg-blue-600 hover:bg-blue-500;
+  }
+
+  .callBtn {
+    @apply bg-green-600 hover:bg-green-500;
+  }
+
+  .raiseControl {
+    @apply flex items-center gap-3;
+
+    .raiseSlider {
+      @apply w-32 accent-cyan-500;
+    }
+  }
+
+  .raiseBtn {
+    @apply bg-cyan-600 hover:bg-cyan-500;
+  }
+
+  .allInBtn {
+    @apply bg-red-600 hover:bg-red-500;
+  }
+}
+
+.waitingMessage {
+  @apply p-4 text-center text-gray-400 text-lg;
+}
+
+.winnerOverlay {
+  @apply fixed inset-0 bg-black/80 flex items-center justify-center z-50;
+
+  .winnerCard {
+    @apply bg-gray-800 rounded-xl p-8 text-center;
+
+    h3 {
+      @apply text-2xl font-bold mb-4;
+    }
+
+    .winnerInfo {
+      @apply space-y-1;
+
+      .winnerName {
+        @apply block text-xl font-semibold text-yellow-400;
+      }
+
+      .winnerAmount {
+        @apply block text-2xl font-bold text-green-400;
+      }
+
+      .winnerHand {
+        @apply block text-gray-400;
+      }
+    }
+  }
+}

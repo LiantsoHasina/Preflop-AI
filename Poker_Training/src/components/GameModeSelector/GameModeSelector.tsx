@@ -43,27 +43,63 @@ export const GameModeSelector: React.FC<GameModeSelectorProps> = ({ isOpen, onSe
 
         <AuthModal isOpen={showAuthModal} onClose={() => setShowAuthModal(false)} />
 
-        {/* Featured Play Poker Mode */}
-        <button
-          className={`${styles.featuredCard} ${styles.playPokerOption}`}
-          onClick={() => onSelect('play-poker')}
-        >
-          <div className={styles.featuredContent}>
-            <div className={styles.featuredIconWrapper}>
-              <span className={styles.featuredIcon}>🎰</span>
-              <span className={styles.newBadge}>NEW</span>
+        {/* Featured Mode Cards */}
+        <div className={styles.featuredCards}>
+          {/* Play Real Poker (vs CPU) */}
+          <button
+            className={`${styles.featuredCard} ${styles.playPokerOption}`}
+            onClick={() => onSelect('play-poker')}
+          >
+            <div className={styles.featuredContent}>
+              <div className={styles.featuredIconWrapper}>
+                <span className={styles.featuredIcon}>🎰</span>
+              </div>
+              <h3 className={styles.featuredTitle}>Play vs CPU</h3>
+              <p className={styles.featuredDescription}>
+                Play against AI opponents with post-hand analysis
+              </p>
+              <div className={styles.featuredFeatures}>
+                <span>2-9 Players</span>
+                <span>Custom Blinds</span>
+                <span>Analysis</span>
+              </div>
             </div>
-            <h3 className={styles.featuredTitle}>Play Real Poker</h3>
-            <p className={styles.featuredDescription}>
-              Play a full poker game against CPU opponents with real betting, showdowns, and post-hand analysis
-            </p>
-            <div className={styles.featuredFeatures}>
-              <span>2-9 Players</span>
-              <span>Custom Blinds</span>
-              <span>Full Analysis</span>
+          </button>
+
+          {/* Multiplayer Mode */}
+          <button
+            className={`${styles.featuredCard} ${styles.multiplayerOption} ${!isAuthenticated ? styles.locked : ''}`}
+            onClick={() => {
+              if (isAuthenticated) {
+                onSelect('multiplayer');
+              } else {
+                setShowAuthModal(true);
+              }
+            }}
+          >
+            <div className={styles.featuredContent}>
+              <div className={styles.featuredIconWrapper}>
+                <span className={styles.featuredIcon}>👥</span>
+                <span className={styles.newBadge}>NEW</span>
+              </div>
+              <h3 className={styles.featuredTitle}>Multiplayer</h3>
+              <p className={styles.featuredDescription}>
+                Play with friends or join public tables online
+              </p>
+              <div className={styles.featuredFeatures}>
+                <span>2-9 Players</span>
+                <span>Room Codes</span>
+                <span>Timer</span>
+              </div>
+              {!isAuthenticated && (
+                <div className={styles.lockOverlay}>
+                  <span className={styles.lockIcon}>🔒</span>
+                  <span className={styles.lockText}>Sign in to play</span>
+                </div>
+              )}
             </div>
-          </div>
-        </button>
+          </button>
+        </div>
 
         <div className={styles.divider}>
           <span>or practice specific skills</span>

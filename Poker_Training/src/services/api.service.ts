@@ -1,6 +1,3 @@
-// AI SERVICE TEMPORARILY DISABLED - Searching for better option
-// Uncomment when ready to re-enable AI functionality
-
 import type { Card, Position, Action } from '../types';
 
 interface AIAnalysisResponse {
@@ -18,33 +15,10 @@ export class PokerAPIService {
   }
 
   /**
-   * AI analysis temporarily disabled
-   * Always throws error to trigger fallback to static ranges
+   * Analyze hand - currently uses static ranges (AI available in backend)
    */
   async analyzeHand(_hand: Card[], _position: Position): Promise<AIAnalysisResponse> {
-    throw new Error('AI analysis is temporarily disabled. Using static ranges.');
-
-    /* ORIGINAL AI IMPLEMENTATION - Uncomment when ready
-    try {
-      const response = await fetch(`${this.baseUrl}/poker/analyze`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ hand, position })
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.message || `API request failed: ${response.statusText}`);
-      }
-
-      return await response.json();
-    } catch (error) {
-      console.error('Error analyzing hand with AI:', error);
-      throw error;
-    }
-    */
+    throw new Error('AI analysis not enabled. Using static ranges.');
   }
 
   /**
@@ -54,12 +28,10 @@ export class PokerAPIService {
     try {
       const response = await fetch(`${this.baseUrl}/poker/health`);
       return response.ok;
-    } catch (error) {
-      console.error('Health check failed:', error);
+    } catch {
       return false;
     }
   }
 }
 
-// Export singleton instance
 export const pokerAPI = new PokerAPIService();

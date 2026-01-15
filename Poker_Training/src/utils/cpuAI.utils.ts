@@ -5,9 +5,9 @@ import type {
   MultiplayerAction,
   BettingRound
 } from '../types';
-import { evaluateHand, getRankNumericValue } from './handEvaluation.utils';
+import { evaluateHand } from './handEvaluation.utils';
 import { getHandNotation } from './poker.utils';
-import { preflopRanges } from '../constants';
+import { preflopRanges, getRankValue } from '../constants';
 
 /**
  * Calculate hand strength as a percentage (0-100)
@@ -57,7 +57,7 @@ const calculatePreflopStrength = (holeCards: Card[]): number => {
 
   // Check premium hands
   const premiumPairs = ['AA', 'KK', 'QQ', 'JJ'];
-  if (premiumPairs.includes(notation)) return 90 + (getRankNumericValue(holeCards[0].rank) - 9) * 2;
+  if (premiumPairs.includes(notation)) return 90 + (getRankValue(holeCards[0].rank) - 9) * 2;
 
   // Check if in raise range for various positions
   const positions = ['UTG', 'MP', 'CO', 'BTN'] as const;
@@ -69,8 +69,8 @@ const calculatePreflopStrength = (holeCards: Card[]): number => {
 
   // High cards matter
   const highCardValue = Math.max(
-    getRankNumericValue(holeCards[0].rank),
-    getRankNumericValue(holeCards[1].rank)
+    getRankValue(holeCards[0].rank),
+    getRankValue(holeCards[1].rank)
   );
 
   let strength = 20 + positionsInRange * 12 + highCardValue * 2;
@@ -83,7 +83,7 @@ const calculatePreflopStrength = (holeCards: Card[]): number => {
 
   // Connected cards bonus
   const gap = Math.abs(
-    getRankNumericValue(holeCards[0].rank) - getRankNumericValue(holeCards[1].rank)
+    getRankValue(holeCards[0].rank) - getRankValue(holeCards[1].rank)
   );
   if (gap <= 2) strength += (3 - gap) * 3;
 
