@@ -1,7 +1,8 @@
 import { authService } from './auth.service';
 import type { Position, BettingRound } from '../types';
 
-const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
+// const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
+const BASE_URL = import.meta.env.VITE_API_URL || 'https://preflopai.netlify.app/api';
 
 export type GameMode = 'preflop-only' | 'postflop-only' | 'full-game' | 'play-poker' | 'multiplayer';
 

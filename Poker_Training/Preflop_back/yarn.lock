@@ -47,6 +47,18 @@
   dependencies:
     sparse-bitfield "^3.0.3"
 
+"@netlify/functions@^5.1.5":
+  version "5.1.5"
+  resolved "https://registry.yarnpkg.com/@netlify/functions/-/functions-5.1.5.tgz#061b290e90b152754fad872fe58e5f5a9df722f8"
+  integrity sha512-mhTl6x3TWoRwNgz8HZ9zvSR9OHB/hDEA6VinBmWY5ubgycKNCerf6XyFaFnujH2Ygx3c32yg6QOOr1v9y8euug==
+  dependencies:
+    "@netlify/types" "2.6.0"
+
+"@netlify/types@2.6.0":
+  version "2.6.0"
+  resolved "https://registry.yarnpkg.com/@netlify/types/-/types-2.6.0.tgz#f5927882d0fac98ed3198060933cf3ed435818d0"
+  integrity sha512-yD20EizHJDQxajJ66Vo8RTwLwR2jMNVxufPG8MHd2AScX8jW4z0VPnnJHArq2GYPFTFZRHmiAhDrXr5m8zof6w==
+
 "@socket.io/component-emitter@~3.1.0":
   version "3.1.2"
   resolved "https://registry.yarnpkg.com/@socket.io/component-emitter/-/component-emitter-3.1.2.tgz#821f8442f4175d8f0467b9daf26e3a18e2d02af2"
@@ -111,7 +123,7 @@
     "@types/range-parser" "*"
     "@types/send" "*"
 
-"@types/express@^5.0.0":
+"@types/express@^5.0.6":
   version "5.0.6"
   resolved "https://registry.yarnpkg.com/@types/express/-/express-5.0.6.tgz#2d724b2c990dcb8c8444063f3580a903f6d500cc"
   integrity sha512-sKYVuV7Sv9fbPIt/442koC7+IIwK5olP1KWeD88e/idgoJqDm3JV/YUiPwkoKK92ylff2MGxSz1CSjsXelx0YA==
