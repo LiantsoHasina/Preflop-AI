@@ -430,6 +430,9 @@ export const PokerPreflopTrainer: React.FC = () => {
 
   return (
     <div className={styles.app}>
+      <div className={styles.warning}>
+        Please, use the desktop version if possible as mobile is constraint to some UX limitation. Still improving
+      </div>
       <GameModeSelector
         isOpen={showGameModeSelector}
         onSelect={handleGameModeSelect}
