@@ -11,7 +11,7 @@ import type {
 } from '../types';
 
 // const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || 'http://localhost:3001';
-const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || 'https://preflopai.netlify.app';
+const SOCKET_URL = import.meta.env.VITE_SOCKET_URL;
 
 type TypedSocket = Socket<ServerToClientEvents, ClientToServerEvents>;
 

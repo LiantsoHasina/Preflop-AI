@@ -12,7 +12,7 @@ export interface AuthResponse {
 }
 
 // const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
-const BASE_URL = import.meta.env.VITE_API_URL || 'https://preflopai.netlify.app/api';
+const BASE_URL = import.meta.env.VITE_API_URL;
 const TOKEN_KEY = 'poker_trainer_token';
 
 class AuthService {
