@@ -30,7 +30,7 @@
   }
 
   .authSection {
-    @apply absolute top-4 right-4 z-10;
+    @apply absolute top-8 md:top-4 right-4 z-10;
 
     .userInfo {
       @apply flex items-center gap-3;
@@ -45,7 +45,7 @@
     }
 
     .signInButton {
-      @apply bg-green-600 hover:bg-green-700 text-white font-semibold px-4 py-2 rounded-lg cursor-pointer transition border-none;
+      @apply bg-green-600 hover:bg-green-700 z-[20000] text-white font-semibold px-4 py-2 rounded-lg cursor-pointer transition border-none;
     }
   }
 
